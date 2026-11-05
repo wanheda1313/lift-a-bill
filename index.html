@@ -6,6 +6,25 @@
 <meta name="description" content="Post a bill anonymously, or swipe through bills and help someone pay one directly.">
 <meta name="theme-color" content="#2f4bff">
 <title>Lift a Bill</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lift a Bill">
+<meta property="og:title" content="Lift a Bill">
+<meta property="og:description" content="Real bills from real people, posted anonymously. Swipe to help pay one directly.">
+<meta property="og:url" content="https://wanheda1313.github.io/lift-a-bill/">
+<meta property="og:image" content="https://wanheda1313.github.io/lift-a-bill/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Lift a Bill">
+<meta name="twitter:description" content="Real bills from real people, posted anonymously. Swipe to help pay one directly.">
+<meta name="twitter:image" content="https://wanheda1313.github.io/lift-a-bill/og.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lift a Bill">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&display=swap">
@@ -62,7 +81,7 @@ h1 { font-family: var(--font-display); font-weight: 800; font-size: 1.45rem; let
 .pill-anon svg { width: 13px; height: 13px; }
 .headline { font-family: var(--font-display); font-weight: 800; font-size: 2.15rem; line-height: 1.02; letter-spacing: -.035em; margin: 0; text-wrap: balance; }
 .headline em { font-style: normal; color: var(--gold); }
-.stats { display: flex; gap: 26px; }
+.stats { display: flex; gap: 22px; flex-wrap: wrap; }
 .stat { display: flex; flex-direction: column; min-width: 0; }
 .stat b { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
 .stat small { font-weight: 600; font-size: .78rem; opacity: .75; }
@@ -168,6 +187,10 @@ form h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.7rem;
 .money-input input { border: 0; background: transparent; font-family: var(--font-display); font-weight: 800; font-size: 2.2rem; letter-spacing: -.03em; padding: 10px 6px; width: 100%; min-width: 0; }
 .money-input input::placeholder { color: var(--muted); opacity: .45; }
 .money-input input:focus { outline: none; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 380px) { .two-col { grid-template-columns: 1fr; } }
+.form-sel { appearance: none; -webkit-appearance: none; font: 500 1rem var(--font-body); background: var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23646a85' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center; border: 2px solid transparent; border-radius: 14px; padding: 13px 32px 13px 14px; width: 100%; color: var(--ink); }
+.form-sel:focus { outline: none; border-color: var(--cobalt); }
 input[type="date"], input[type="text"], textarea { font: 500 1rem var(--font-body); background: var(--surface-2); border: 2px solid transparent; border-radius: 14px; padding: 13px 14px; width: 100%; }
 input[type="date"]:focus, input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--cobalt); }
 textarea { resize: vertical; min-height: 100px; }
@@ -181,6 +204,104 @@ textarea { resize: vertical; min-height: 100px; }
 .mine-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--surface); border-radius: 18px; padding: 12px 14px; box-shadow: var(--shadow-sm); }
 .mine-item span { font-weight: 700; font-size: .95rem; min-width: 0; overflow-wrap: anywhere; }
 .mine-item button { font: 700 .85rem var(--font-body); background: var(--cobalt-soft); border: 0; color: var(--cobalt); border-radius: 999px; padding: 8px 13px; cursor: pointer; white-space: nowrap; }
+
+/* Side panels: only on wide screens */
+.layout { max-width: 440px; margin: 0 auto; }
+.side { display: none; }
+.panel { background: var(--surface); border-radius: 24px; box-shadow: var(--shadow-sm); padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+.panel h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; letter-spacing: -.02em; margin: 0; }
+.panel h3 { font-weight: 700; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 6px 0 0; }
+.panel p { margin: 0; font-weight: 500; font-size: .95rem; }
+.panel .muted, .muted { color: var(--muted); font-size: .88rem; }
+.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; column-gap: 12px; }
+.steps li::before { content: counter(s); grid-row: span 2; width: 34px; height: 34px; border-radius: 50%; background: var(--cobalt-soft); color: var(--cobalt); font: 800 1rem var(--font-display); display: grid; place-items: center; }
+.steps b { font-weight: 800; }
+.steps span { color: var(--muted); font-size: .9rem; font-weight: 500; }
+.tips { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.tips li { position: relative; padding-left: 22px; font-size: .92rem; font-weight: 500; }
+.tips li::before { content: ""; position: absolute; left: 2px; top: .45em; width: 10px; height: 10px; border-radius: 3px; background: var(--coral); transform: rotate(45deg); }
+.mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mini-stats div { background: var(--surface-2); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; min-width: 0; }
+.mini-stats b { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.mini-stats small { font-weight: 600; font-size: .78rem; color: var(--muted); }
+.bars { display: flex; flex-direction: column; gap: 9px; }
+.bar { display: grid; grid-template-columns: 96px 1fr 26px; align-items: center; gap: 10px; font-size: .86rem; font-weight: 600; }
+.bar .track { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.bar .fill { height: 100%; border-radius: 999px; }
+.bar em { font-style: normal; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+.link-btn { align-self: flex-start; background: var(--cobalt-soft); color: var(--cobalt); font-weight: 700; text-decoration: none; border-radius: 12px; padding: 9px 14px; }
+.share-row { display: flex; align-items: center; gap: 8px; background: var(--surface-2); border-radius: 14px; padding: 6px 6px 6px 12px; min-width: 0; }
+.share-row span { flex: 1; min-width: 0; font-size: .85rem; font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.share-row button { border: 0; background: var(--ink); color: var(--surface); font: 700 .85rem var(--font-body); border-radius: 10px; padding: 8px 12px; cursor: pointer; white-space: nowrap; }
+@media (min-width: 1040px) {
+  .layout { max-width: 1200px; display: grid; grid-template-columns: minmax(0, 1fr) 440px minmax(0, 1fr); gap: 36px; align-items: start; }
+  .side { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 20px; }
+  .hero .inner { max-width: 1200px; }
+  .hero { padding-block: 26px 84px; }
+  .headline { font-size: 2.9rem; max-width: 20ch; }
+  main { margin-top: -60px; }
+}
+
+/* Ticker (phones) */
+.ticker { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); border-radius: 999px; padding: 7px 14px 7px 10px; font-weight: 600; font-size: .86rem; min-width: 0; }
+.ticker .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex: none; box-shadow: 0 0 0 0 rgba(255,176,32,.7); animation: pulse 1.8s infinite; }
+@keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(255,176,32,0); } 100% { box-shadow: 0 0 0 0 rgba(255,176,32,0); } }
+.ticker span { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity .3s; }
+
+/* Filters */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.fchip { border: 0; background: var(--surface); color: var(--muted); font: 700 .86rem var(--font-body); border-radius: 999px; padding: 8px 13px; cursor: pointer; box-shadow: var(--shadow-sm); }
+.fchip[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.fsel { appearance: none; -webkit-appearance: none; border: 0; background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23646a85' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center; color: var(--ink); font: 700 .86rem var(--font-body); border-radius: 999px; padding: 8px 30px 8px 13px; cursor: pointer; box-shadow: var(--shadow-sm); max-width: 100%; }
+.fsel.on { background-color: var(--ink); color: var(--surface); }
+
+/* Card extras */
+.meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.where { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-size: .8rem; color: var(--muted); }
+.where svg { width: 13px; height: 13px; }
+.progress { margin: 12px 20px 0; display: flex; flex-direction: column; gap: 6px; }
+.progress .track { height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.progress .fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--cobalt), #6f86ff); }
+.progress small { font-weight: 700; font-size: .82rem; color: var(--muted); }
+.progress small b { color: var(--cobalt); }
+.card.full .progress .fill { background: linear-gradient(90deg, var(--ok), #5be3a9); }
+.card.full .progress small b { color: var(--ok); }
+.full-badge { position: absolute; top: 64px; right: 20px; background: var(--ok); color: #fff; border-radius: 999px; padding: 5px 11px; font-weight: 800; font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; z-index: 2; }
+
+/* I sent help */
+.sent { border-top: 1px solid var(--hair); padding-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.sent p { margin: 0; font-weight: 700; font-size: .92rem; }
+.sent .sent-row { display: flex; gap: 10px; }
+.sent .money-input { flex: 1; min-width: 0; padding: 0 12px; }
+.sent .money-input b { font-size: 1.3rem; }
+.sent .money-input input { font-size: 1.4rem; padding: 8px 4px; }
+.sent .btn { white-space: nowrap; }
+.sent .done { color: var(--ok); }
+
+/* Mark paid */
+.mine-item { flex-wrap: wrap; }
+.mine-item .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.mine-item button.ghost { background: transparent; color: var(--muted); }
+.mine-item .paid-form { flex-basis: 100%; display: flex; flex-direction: column; gap: 8px; }
+.mine-item .paid-form textarea { min-height: 70px; }
+.mine-item .paid-form .acts button:first-child { background: var(--ok); color: #fff; }
+
+/* Activity + thanks */
+.feed { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.feed li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; font-size: .9rem; font-weight: 600; }
+.feed li i { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--cobalt-soft); color: var(--cobalt); }
+.feed li i.paid { background: #dcf7ea; color: var(--ok); }
+.feed li i svg { width: 15px; height: 15px; }
+.feed li small { display: block; color: var(--muted); font-weight: 600; font-size: .78rem; }
+.thanks-list { display: flex; flex-direction: column; gap: 12px; }
+.thanks-list figure { margin: 0; background: var(--surface-2); border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+.thanks-list blockquote { margin: 0; font-weight: 600; font-size: .95rem; overflow-wrap: anywhere; }
+.thanks-list blockquote::before { content: "\201C"; font-family: var(--font-display); color: var(--cobalt); font-size: 1.4em; line-height: 0; margin-right: 2px; vertical-align: -.25em; }
+.thanks-list figcaption { font-weight: 600; font-size: .78rem; color: var(--muted); }
+.thanks-mobile { margin-top: 26px; display: flex; flex-direction: column; gap: 12px; }
+.thanks-mobile h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; letter-spacing: -.02em; margin: 0; }
+@media (min-width: 1040px) { .thanks-mobile, .ticker { display: none; } }
 
 footer { display: flex; flex-direction: column; gap: 8px; font-weight: 500; font-size: .86rem; color: var(--muted); padding: 8px 2px 0; }
 footer p { margin: 0; max-width: 60ch; }
@@ -208,18 +329,51 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     <div class="stats" aria-live="polite">
       <div class="stat"><b id="st-count">–</b><small>bills waiting</small></div>
       <div class="stat"><b id="st-total">–</b><small>total needed</small></div>
+      <div class="stat"><b id="st-lifted">–</b><small>lifted so far</small></div>
     </div>
+    <div class="ticker" id="ticker" hidden><span class="dot" aria-hidden="true"></span><span id="ticker-text"></span></div>
   </div>
 </div>
 
 <main class="gutter">
-<div class="inner">
+<div class="layout">
+<aside class="side side-left" aria-label="About Lift a Bill">
+  <section class="panel">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><b>Post a bill</b><span>Add the amount, due date and how to pay you. No name, no sign-up.</span></li>
+      <li><b>Helpers swipe</b><span>People swipe through bills and tap the heart on ones they want to help with.</span></li>
+      <li><b>Get paid directly</b><span>They send money straight to your Cash App, Venmo or fundraiser link.</span></li>
+    </ol>
+  </section>
+  <section class="panel">
+    <h2>Wall of thanks</h2>
+    <div class="thanks-list" id="thanks-side"><p class="muted">When someone's bill gets paid, their thank-you note shows up here.</p></div>
+  </section>
+  <section class="panel">
+    <h2>Stay safe</h2>
+    <ul class="tips">
+      <li>Never post bank account or card numbers. Use a payment handle or link.</li>
+      <li>Leave out your full name and address.</li>
+      <li>Helpers: posts can't be verified, so give what you're comfortable giving.</li>
+      <li>See something off? Tap the flag to report it. Three reports hide a bill.</li>
+    </ul>
+  </section>
+</aside>
+<div class="inner app">
   <div class="tabs" role="tablist">
     <button id="tab-help" role="tab" aria-selected="true">Help someone</button>
     <button id="tab-ask" role="tab" aria-selected="false">Post a bill</button>
   </div>
 
   <section id="view-help">
+    <div class="filters" role="group" aria-label="Filter bills" style="margin-bottom:16px">
+      <button type="button" class="fchip" data-q="all" aria-pressed="true">All</button>
+      <button type="button" class="fchip" data-q="small" aria-pressed="false">Under $50</button>
+      <button type="button" class="fchip" data-q="week" aria-pressed="false">Due this week</button>
+      <select class="fsel" id="f-kind-filter" aria-label="Bill type"><option value="">Any type</option></select>
+      <select class="fsel" id="f-area-filter" aria-label="Area"><option value="">Any area</option></select>
+    </div>
     <div class="deck" id="deck">
       <div class="empty"><div class="big" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div><strong>Loading bills…</strong><span>Bills people post show up here as cards.</span></div>
     </div>
@@ -235,6 +389,10 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       </button>
     </div>
     <p class="hint" style="margin-top:16px">Drag the card, tap the buttons, or use ← → on a keyboard.</p>
+    <div class="thanks-mobile" id="thanks-mobile-wrap" hidden>
+      <h2>Wall of thanks</h2>
+      <div class="thanks-list" id="thanks-mobile"></div>
+    </div>
   </section>
 
   <section id="view-ask" hidden>
@@ -249,9 +407,15 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
           <label for="f-amount">Amount due</label>
           <div class="money-input"><b aria-hidden="true">$</b><input id="f-amount" type="number" inputmode="decimal" min="1" max="100000" step="0.01" placeholder="148.20"></div>
         </div>
-        <div class="field">
-          <label for="f-due">Due date</label>
-          <input id="f-due" type="date">
+        <div class="two-col">
+          <div class="field">
+            <label for="f-due">Due date</label>
+            <input id="f-due" type="date">
+          </div>
+          <div class="field">
+            <label for="f-area">Area <span style="opacity:.6">(optional)</span></label>
+            <select id="f-area" class="form-sel"><option value="">Choose one</option></select>
+          </div>
         </div>
         <div class="field">
           <label for="f-note">What's going on? <span style="opacity:.6">(optional)</span></label>
@@ -277,6 +441,33 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     <p>Posts can't be verified, so only give what you're comfortable giving. Bills reported 3 times get hidden, and bills disappear 2 weeks after their due date.</p>
   </footer>
 </div>
+<aside class="side side-right" aria-label="Bill activity and resources">
+  <section class="panel">
+    <h2>Right now</h2>
+    <div class="mini-stats">
+      <div><b id="sd-soon">–</b><small>due in the next 7 days</small></div>
+      <div><b id="sd-avg">–</b><small>average bill</small></div>
+    </div>
+    <h3>Bills by type</h3>
+    <div class="bars" id="sd-bars"><p class="muted">A breakdown shows up here as bills come in.</p></div>
+  </section>
+  <section class="panel">
+    <h2>Live activity</h2>
+    <ul class="feed" id="feed"><li class="muted" style="display:block">Lifts and paid bills show up here as they happen.</li></ul>
+  </section>
+  <section class="panel">
+    <h2>More help with bills</h2>
+    <p>Call or text <b>211</b> for free, confidential help finding local rent, utility and food assistance.</p>
+    <a class="link-btn" href="https://www.211.org" target="_blank" rel="noopener noreferrer">Visit 211.org</a>
+    <p class="muted">Many utilities also offer payment plans. Ask yours before the due date.</p>
+  </section>
+  <section class="panel share">
+    <h2>Spread the word</h2>
+    <p>Every share puts more bills in front of people who can help.</p>
+    <div class="share-row"><span id="share-url"></span><button type="button" id="share-copy">Copy link</button></div>
+  </section>
+</aside>
+</div>
 </main>
 
 <div class="overlay" id="sheet" hidden>
@@ -290,17 +481,23 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       <button class="btn dark" id="hp-done">Next bill</button>
     </div>
     <p class="fine" id="hp-fine">Money goes straight from you to them. Every little bit counts, even $5.</p>
+    <form class="sent" id="sent-form" novalidate>
+      <p id="sent-q">Sent something? Let everyone know so the bill's progress updates.</p>
+      <div class="sent-row" id="sent-row">
+        <div class="money-input"><b aria-hidden="true">$</b><input id="sent-amt" type="number" inputmode="decimal" min="1" max="5000" step="0.01" placeholder="20" aria-label="Amount you sent"></div>
+        <button class="btn go" type="submit" id="sent-btn">I sent it</button>
+      </div>
+    </form>
   </div>
 </div>
 
 <div class="toast" id="toast" role="status" hidden></div>
 
+<script src="config.js"></script>
 <script>
-// ===== Settings: your Supabase project =====
-// The "anon" / "publishable" key is meant to be public. Never put the service_role / secret key here.
-const SUPABASE_URL = "https://qgymszrpaicqgiwcyxpd.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFneW1zenJwYWljcWdpd2N5eHBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0NzM3NDAsImV4cCI6MjEwNDA0OTc0MH0.nJu1Z6SPLDj0xBGSgbWqVqPlSQNGW4GI5v3qQE8_1Wk";
-// ===========================================
+// Settings live in config.js (uploaded once, next to this file).
+const SUPABASE_URL = (window.LAB_CONFIG && window.LAB_CONFIG.url) || "";
+const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
 
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -320,6 +517,9 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     inbox: '<path d="M4 13l3-8h10l3 8v6H4z"/><path d="M4 13h5l1 2h4l1-2h5"/>',
     party: '<path d="M4 20l5-14 9 9z"/><path d="M14 4v2M19 9h2M17 6l1.5-1.5"/>',
     clock: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+    pin: '<path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/>',
+    up: '<path d="M12 19V6"/><path d="M6 11l6-6 6 6"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
     wifiOff: '<path d="M3 3l18 18"/><path d="M8.5 12.5a8.5 8.5 0 0 1 3-1.3M3 9a14 14 0 0 1 5-3M16 9.5a9 9 0 0 1 5 0"/><circle cx="12" cy="19.5" r=".8"/>'
   };
   const svg = (k) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICON[k] || ICON.dots) + '</svg>';
@@ -328,6 +528,8 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     ["Phone", "phone", "#8b5cf6"], ["Internet", "wifi", "#14b8a6"], ["Car payment", "car", "#ec4899"], ["Car insurance", "shield", "#22a06b"],
     ["Medical", "plus", "#ef4444"], ["Childcare", "child", "#d97706"], ["Groceries", "cart", "#16a34a"], ["Other", "dots", "#64748b"]
   ];
+  const AREAS = ["Long Beach", "South LA", "Downtown LA", "East LA", "Hollywood / Mid-City", "Westside", "South Bay",
+    "San Fernando Valley", "San Gabriel Valley", "Antelope Valley", "Orange County", "Inland Empire", "Elsewhere"];
   const KIND = Object.fromEntries(KINDS.map(([n, e, c]) => [n, { e, c }]));
   // Sample cards so new visitors can see how it works. Clearly labeled, never saved, no real payment info.
   const EXAMPLES = [
@@ -335,8 +537,9 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     { id: "example-2", example: true, kind: "Car insurance", amount: 96, due: null, note: "Example card: swipe right (or tap the heart) to see how to send help. Swipe left to pass.", how: "" },
     { id: "example-3", example: true, kind: "Groceries", amount: 60, due: null, note: "Example card: real bills show up ahead of these. Post your own from the \u201cPost a bill\u201d tab.", how: "" }
   ];
-  let bills = [], queue = [], current = null;
-  let seen, reported, mine;
+  let bills = [], queue = [], current = null, activity = [], thanks = [], totals = null;
+  let seen, reported, mine, liftedByMe;
+  const filt = Object.assign({ q: "all", kind: "", area: "" }, (() => { try { return JSON.parse(localStorage.getItem("lab-filters") || "{}"); } catch (e) { return {}; } })());
   const configured = /^https:\/\/.+\.supabase\.co\/?$/.test(SUPABASE_URL) && SUPABASE_KEY.length > 20;
 
   const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || "null") ?? d; } catch (e) { return d; } };
@@ -344,6 +547,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
   seen = new Set(load("lab-seen", []));
   reported = new Set(load("lab-reported", []));
   mine = load("lab-mine", []);
+  liftedByMe = load("lab-lifted", {});
   const saveSeen = () => store("lab-seen", [...seen].slice(-500));
 
   async function rpc(name, args) {
@@ -366,6 +570,34 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     const s = document.createElement("span"); s.innerHTML = svg(emoji); s.append(document.createTextNode(name));
     l.append(inp, s); chips.append(l);
   });
+
+  // Area + filter selects
+  AREAS.forEach((a) => { const o = new Option(a, a); $("f-area").add(o); $("f-area-filter").add(new Option(a, a)); });
+  KINDS.forEach(([n]) => $("f-kind-filter").add(new Option(n, n)));
+  function syncFilterUI() {
+    document.querySelectorAll(".fchip").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.q === filt.q)));
+    $("f-kind-filter").value = filt.kind; $("f-area-filter").value = filt.area;
+    $("f-kind-filter").classList.toggle("on", !!filt.kind); $("f-area-filter").classList.toggle("on", !!filt.area);
+  }
+  function setFilter(patch) {
+    Object.assign(filt, patch); store("lab-filters", filt); syncFilterUI();
+    if (sheetOpen()) return; rebuildQueue(); renderDeck();
+  }
+  document.querySelectorAll(".fchip").forEach((b) => { b.onclick = () => setFilter({ q: b.dataset.q }); });
+  $("f-kind-filter").onchange = (e) => setFilter({ kind: e.target.value });
+  $("f-area-filter").onchange = (e) => setFilter({ area: e.target.value });
+  const filtersOn = () => filt.q !== "all" || !!filt.kind || !!filt.area;
+  function passes(b) {
+    if (filt.kind && b.kind !== filt.kind) return false;
+    if (filt.area && b.area !== filt.area) return false;
+    if (filt.q === "small" && b.amount - (b.lifted || 0) >= 50) return false;
+    if (filt.q === "week") {
+      if (!b.due) return false;
+      const lim = new Date(); lim.setHours(23, 59, 0, 0); lim.setDate(lim.getDate() + 7);
+      if (new Date(b.due + "T12:00:00") > lim) return false;
+    }
+    return true;
+  }
 
   // Tabs
   function showTab(which) {
@@ -411,9 +643,10 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     el.innerHTML = `
       <div class="stamp yes">Help</div><div class="stamp no">Pass</div>
       <div class="ex-sticker" hidden>Example</div>
-      <div class="card-top"><span class="cat"><i></i><span class="kn"></span></span><span class="ago"></span></div>
+      <div class="card-top"><span class="cat"><i></i><span class="kn"></span></span><span class="meta"><span class="where" hidden></span><span class="ago"></span></span></div>
       <div class="money"><div class="lbl">Amount needed</div><div class="amount"><sup>$</sup><span class="d"></span><span class="cents"></span></div></div>
       <div class="due"></div>
+      <div class="progress" hidden><div class="track"><div class="fill"></div></div><small></small></div>
       <div class="note"><p></p></div>
       <div class="card-foot"><span>Posted anonymously</span><span class="no-id"></span></div>`;
     el.querySelector(".cat i").style.background = k.c;
@@ -423,6 +656,24 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     el.querySelector(".d").textContent = Number(dollars).toLocaleString("en-US");
     el.querySelector(".cents").textContent = "." + cents;
     const d = el.querySelector(".due"); d.textContent = due.text; if (due.soon) d.classList.add("soon");
+    if (b.area) { const w = el.querySelector(".where"); w.hidden = false; w.innerHTML = svg("pin"); w.append(document.createTextNode(b.area)); }
+    const lifted = Number(b.lifted || 0);
+    if (lifted > 0) {
+      const pr = el.querySelector(".progress"); pr.hidden = false;
+      const pct = Math.min(100, (lifted / b.amount) * 100);
+      pr.querySelector(".fill").style.width = Math.max(4, pct) + "%";
+      const sm = pr.querySelector("small");
+      const helpers = b.lift_count || 1;
+      if (lifted >= b.amount) {
+        el.classList.add("full");
+        sm.innerHTML = "<b>Fully lifted</b>";
+        sm.append(document.createTextNode(` by ${helpers} ${helpers === 1 ? "helper" : "helpers"}`));
+        const fb = document.createElement("div"); fb.className = "full-badge"; fb.textContent = "Lifted!"; el.append(fb);
+      } else {
+        const bb = document.createElement("b"); bb.textContent = money(lifted) + " lifted";
+        sm.append(bb, document.createTextNode(` of ${money(b.amount)} · ${helpers} ${helpers === 1 ? "helper" : "helpers"}`));
+      }
+    }
     const p = el.querySelector(".note p");
     if (b.note) p.textContent = b.note; else { p.textContent = "No story given, just a bill that needs paying."; p.className = "none"; }
     el.querySelector(".no-id").textContent = b.example ? "Sample card" : "#" + String(b.id).slice(0, 6).toUpperCase();
@@ -442,14 +693,46 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
   function rebuildQueue() {
     const mineIds = new Set(mine.map((m) => m.id));
-    queue = bills.filter((b) => !seen.has(b.id) && !reported.has(b.id) && !mineIds.has(b.id));
-    queue.sort((a, b) => (a.due || "9999").localeCompare(b.due || "9999") || (b.created || 0) - (a.created || 0));
-    queue = queue.concat(EXAMPLES.filter((b) => !seen.has(b.id)));
+    queue = bills.filter((b) => !seen.has(b.id) && !reported.has(b.id) && !mineIds.has(b.id) && passes(b));
+    const full = (b) => (b.lifted || 0) >= b.amount ? 1 : 0;
+    queue.sort((a, b) => full(a) - full(b) || (a.due || "9999").localeCompare(b.due || "9999") || (b.created || 0) - (a.created || 0));
+    if (!filtersOn()) queue = queue.concat(EXAMPLES.filter((b) => !seen.has(b.id)));
   }
+
+  function renderSide() {
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const week = new Date(today.getTime() + 7 * 864e5);
+    const soon = bills.filter((b) => b.due && new Date(b.due + "T12:00:00") <= week);
+    $("sd-soon").textContent = soon.length.toLocaleString("en-US");
+    $("sd-avg").textContent = bills.length ? moneyShort(bills.reduce((s, b) => s + b.amount, 0) / bills.length) : "–";
+    const counts = {};
+    bills.forEach((b) => { counts[b.kind] = (counts[b.kind] || 0) + 1; });
+    const rows = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    const box = $("sd-bars"); box.replaceChildren();
+    if (!rows.length) { const p = document.createElement("p"); p.className = "muted"; p.textContent = "A breakdown shows up here as bills come in."; box.append(p); return; }
+    const max = rows[0][1];
+    rows.forEach(([kind, n]) => {
+      const r = document.createElement("div"); r.className = "bar";
+      const l = document.createElement("span"); l.textContent = kind;
+      const t = document.createElement("div"); t.className = "track";
+      const f = document.createElement("div"); f.className = "fill"; f.style.width = Math.max(6, (n / max) * 100) + "%"; f.style.background = (KIND[kind] || KIND.Other).c;
+      t.append(f);
+      const e = document.createElement("em"); e.textContent = n;
+      r.append(l, t, e); box.append(r);
+    });
+  }
+  const siteUrl = location.origin + location.pathname;
+  $("share-url").textContent = siteUrl.replace(/^https?:\/\//, "");
+  $("share-copy").onclick = async () => {
+    try { await navigator.clipboard.writeText(siteUrl); $("share-copy").textContent = "Copied!"; }
+    catch (e) { const r = document.createRange(); r.selectNodeContents($("share-url")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); $("share-copy").textContent = "Selected"; }
+    setTimeout(() => { $("share-copy").textContent = "Copy link"; }, 2000);
+  };
 
   function renderStats() {
     $("st-count").textContent = bills.length.toLocaleString("en-US");
-    $("st-total").textContent = moneyShort(bills.reduce((s, b) => s + (b.amount || 0), 0));
+    $("st-total").textContent = moneyShort(bills.reduce((s, b) => s + Math.max(0, (b.amount || 0) - (b.lifted || 0)), 0));
+    $("st-lifted").textContent = totals ? moneyShort(Number(totals.lifted_total || 0)) : "–";
   }
 
   const sheetOpen = () => !$("sheet").hidden;
@@ -464,7 +747,10 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     current = queue[0] || null;
     setButtons();
     if (!current) {
-      if (bills.length || seen.size) {
+      if (filtersOn()) {
+        deck.append(emptyEl("inbox", "No bills match", "Nothing fits these filters right now. Try a wider search.",
+          ["Clear filters", () => setFilter({ q: "all", kind: "", area: "" })]));
+      } else if (bills.length || seen.size) {
         deck.append(emptyEl("party", "You've seen every bill", "New ones show up here as people post them. Check back soon.",
           seen.size ? ["Look through them again", () => { seen = new Set(); saveSeen(); rebuildQueue(); renderDeck(); }] : null));
       } else {
@@ -543,12 +829,47 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     }
     $("hp-copy").dataset.text = text;
     $("hp-copy").textContent = "Copy";
+    sheetBill = b;
+    const mineAlready = liftedByMe[b.id];
+    const remaining = Math.max(0, b.amount - (b.lifted || 0));
+    $("sent-row").hidden = !!mineAlready || (!b.example && remaining <= 0);
+    $("sent-q").className = mineAlready ? "done" : "";
+    $("sent-q").textContent = mineAlready ? `Thanks! You marked ${money(mineAlready)} sent on this bill.`
+      : (!b.example && remaining <= 0) ? "This bill is already fully lifted. You can still send extra if you'd like."
+      : b.example ? "After you send money, you'd enter it here so the bill's progress bar updates. Try it."
+      : "Sent something? Let everyone know so the bill's progress updates.";
+    $("sent-amt").value = "";
     $("sheet").hidden = false;
     setButtons();
     confetti();
     setTimeout(() => $("hp-done").focus(), 50);
   }
-  function closeSheet() { $("sheet").hidden = true; renderDeck(); }
+  let sheetBill = null;
+  function closeSheet() { $("sheet").hidden = true; sheetBill = null; rebuildQueue(); renderDeck(); }
+  $("sent-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const b = sheetBill; if (!b) return;
+    const amt = Math.round(parseFloat($("sent-amt").value) * 100) / 100;
+    if (!(amt >= 1 && amt <= 5000)) { toast("Enter what you sent, between $1 and $5,000."); return; }
+    if (b.example) {
+      $("sent-row").hidden = true; $("sent-q").className = "done";
+      $("sent-q").textContent = `On a real bill, ${money(amt)} would now show on its progress bar for everyone.`;
+      confetti(); return;
+    }
+    $("sent-btn").disabled = true;
+    try {
+      const newTotal = Number(await rpc("lab_lift_bill", { p_id: b.id, p_amount: amt }));
+      const added = Math.max(0, newTotal - (b.lifted || 0));
+      liftedByMe[b.id] = (liftedByMe[b.id] || 0) + (added || amt); store("lab-lifted", liftedByMe);
+      const live = bills.find((x) => x.id === b.id); if (live) { live.lifted = newTotal; live.lift_count = (live.lift_count || 0) + 1; }
+      $("sent-row").hidden = true; $("sent-q").className = "done";
+      $("sent-q").textContent = newTotal >= b.amount ? "You helped finish this bill. Thank you!" : `Thank you! ${money(newTotal)} of ${money(b.amount)} is now lifted.`;
+      confetti();
+      refreshExtras().catch(() => {});
+    } catch (err) {
+      toast(/no longer open|between|Too many/.test(err.message) ? err.message + "." : "Couldn't save that just now. Try again in a moment.");
+    } finally { $("sent-btn").disabled = false; }
+  });
   $("hp-done").onclick = closeSheet;
   $("sheet").addEventListener("click", (e) => { if (e.target === $("sheet")) closeSheet(); });
   $("hp-copy").onclick = async () => {
@@ -626,7 +947,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     const token = newToken();
     const body = {
       p_kind: kind, p_amount: amount, p_due: $("f-due").value || null,
-      p_note: $("f-note").value.trim().slice(0, 400), p_how: how.slice(0, 200), p_token: token
+      p_note: $("f-note").value.trim().slice(0, 400), p_how: how.slice(0, 200), p_token: token, p_area: $("f-area").value
     };
     $("f-submit").disabled = true;
     try {
@@ -648,29 +969,118 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     list.replaceChildren();
     $("mine").hidden = !mine.length;
     mine.forEach((m) => {
-      const live = bills.some((b) => b.id === m.id);
+      const liveBill = bills.find((b) => b.id === m.id);
+      const live = !!liveBill;
       const row = document.createElement("div"); row.className = "mine-item";
       const s = document.createElement("span");
-      s.textContent = `${m.kind} · ${money(m.amount)}${live ? "" : " · hidden or expired"}`;
-      const btn = document.createElement("button"); btn.textContent = live ? "Paid, take it down" : "Remove";
-      btn.onclick = async () => {
-        btn.disabled = true;
-        try {
-          if (live) await rpc("lab_remove_bill", { p_id: m.id, p_token: m.token });
-          mine = mine.filter((x) => x.id !== m.id);
-          store("lab-mine", mine);
-          await refresh();
-          if (live) toast("Taken down. Hope it worked out!");
-        } catch (e) { btn.disabled = false; btn.textContent = "Try again"; }
-      };
-      row.append(s, btn); list.append(row);
+      const lifted = liveBill ? Number(liveBill.lifted || 0) : 0;
+      s.textContent = `${m.kind} · ${money(m.amount)}` + (live ? (lifted > 0 ? ` · ${money(lifted)} lifted` : "") : " · closed or expired");
+      const acts = document.createElement("div"); acts.className = "acts";
+      const forget = async () => { mine = mine.filter((x) => x.id !== m.id); store("lab-mine", mine); await refresh(); };
+      if (live) {
+        const paid = document.createElement("button"); paid.textContent = "Mark paid";
+        const del = document.createElement("button"); del.textContent = "Delete"; del.className = "ghost";
+        paid.onclick = () => {
+          if (row.querySelector(".paid-form")) return;
+          const f = document.createElement("div"); f.className = "paid-form";
+          const lab = document.createElement("label"); lab.className = "small"; lab.textContent = "Leave a thank-you for the wall (optional, no names):"; lab.htmlFor = "thx-" + m.id;
+          const ta = document.createElement("textarea"); ta.id = "thx-" + m.id; ta.maxLength = 280; ta.placeholder = "Lights are back on. Thank you to whoever helped!";
+          const a2 = document.createElement("div"); a2.className = "acts";
+          const ok = document.createElement("button"); ok.textContent = "Mark as paid";
+          const no = document.createElement("button"); no.textContent = "Cancel"; no.className = "ghost";
+          no.onclick = () => f.remove();
+          ok.onclick = async () => {
+            ok.disabled = true;
+            try {
+              const done = await rpc("lab_mark_paid", { p_id: m.id, p_token: m.token, p_thanks: ta.value.trim().slice(0, 280) });
+              if (!done) throw new Error("not yours");
+              mine = mine.filter((x) => x.id !== m.id); store("lab-mine", mine);
+              toast("Marked paid. So glad it worked out!"); confetti();
+              await refresh();
+            } catch (e) { ok.disabled = false; ok.textContent = "Try again"; }
+          };
+          a2.append(ok, no); f.append(lab, ta, a2); row.append(f); ta.focus();
+        };
+        del.onclick = async () => {
+          if (del.dataset.confirm !== "1") { del.dataset.confirm = "1"; del.textContent = "Tap again to delete"; return; }
+          del.disabled = true;
+          try { await rpc("lab_remove_bill", { p_id: m.id, p_token: m.token }); await forget(); toast("Deleted."); }
+          catch (e) { del.disabled = false; del.textContent = "Try again"; }
+        };
+        acts.append(paid, del);
+      } else {
+        const rm = document.createElement("button"); rm.textContent = "Remove from list"; rm.className = "ghost";
+        rm.onclick = forget; acts.append(rm);
+      }
+      row.append(s, acts); list.append(row);
     });
+  }
+
+  // Activity, thanks, totals
+  function activityText(e) {
+    const where = e.area && e.area !== "Elsewhere" ? ` in ${e.area}` : "";
+    const kind = (e.bill_kind || "bill").toLowerCase();
+    const art = /^[aeiou]/.test(kind) ? "an" : "a";
+    return e.kind === "paid"
+      ? `A ${moneyShort(e.amount)} ${kind} bill${where} got paid`
+      : `Someone lifted ${moneyShort(e.amount)} on ${art} ${kind} bill${where}`;
+  }
+  function renderFeed() {
+    const ul = $("feed"); ul.replaceChildren();
+    if (!activity.length) { const li = document.createElement("li"); li.className = "muted"; li.style.display = "block"; li.textContent = "Lifts and paid bills show up here as they happen."; ul.append(li); return; }
+    activity.slice(0, 8).forEach((e) => {
+      const li = document.createElement("li");
+      const i = document.createElement("i"); if (e.kind === "paid") i.className = "paid"; i.innerHTML = svg(e.kind === "paid" ? "check" : "up");
+      const t = document.createElement("div"); t.textContent = activityText(e);
+      const sm = document.createElement("small"); sm.textContent = ago(Date.parse(e.created_at)); t.append(sm);
+      li.append(i, t); ul.append(li);
+    });
+  }
+  let tickIdx = 0, tickTimer = null;
+  function renderTicker() {
+    const tk = $("ticker");
+    if (!activity.length) { tk.hidden = true; clearInterval(tickTimer); tickTimer = null; return; }
+    tk.hidden = false;
+    const show = () => {
+      const e = activity[tickIdx % Math.min(activity.length, 10)];
+      const sp = $("ticker-text"); sp.style.opacity = 0;
+      setTimeout(() => { sp.textContent = activityText(e) + " · " + ago(Date.parse(e.created_at)); sp.style.opacity = 1; }, 250);
+      tickIdx++;
+    };
+    show();
+    clearInterval(tickTimer);
+    if (activity.length > 1) tickTimer = setInterval(show, 4500);
+  }
+  function thanksFigure(t) {
+    const f = document.createElement("figure");
+    const q = document.createElement("blockquote"); q.textContent = t.thanks;
+    const c = document.createElement("figcaption");
+    c.textContent = `${t.bill_kind} bill · ${moneyShort(t.amount)}${t.area && t.area !== "Elsewhere" ? " · " + t.area : ""} · ${ago(Date.parse(t.paid_at))}`;
+    f.append(q, c); return f;
+  }
+  function renderThanks() {
+    const side = $("thanks-side"); side.replaceChildren();
+    const mob = $("thanks-mobile"); mob.replaceChildren();
+    $("thanks-mobile-wrap").hidden = !thanks.length;
+    if (!thanks.length) { const p = document.createElement("p"); p.className = "muted"; p.textContent = "When someone's bill gets paid, their thank-you note shows up here."; side.append(p); return; }
+    thanks.slice(0, 5).forEach((t) => side.append(thanksFigure(t)));
+    thanks.slice(0, 3).forEach((t) => mob.append(thanksFigure(t)));
+  }
+  async function refreshExtras() {
+    const [a, t, tot] = await Promise.all([
+      rpc("lab_activity", {}).catch(() => null), rpc("lab_thanks", {}).catch(() => null), rpc("lab_totals", {}).catch(() => null)
+    ]);
+    if (a) { activity = a; renderFeed(); renderTicker(); }
+    if (t) { thanks = t; renderThanks(); }
+    if (tot && tot[0]) { totals = tot[0]; renderStats(); }
   }
 
   async function refresh() {
     const rows = await rpc("lab_list_bills", {});
-    bills = (rows || []).map((r) => ({ ...r, amount: Number(r.amount), created: Date.parse(r.created_at) }));
+    bills = (rows || []).map((r) => ({ ...r, amount: Number(r.amount), lifted: Number(r.lifted || 0), created: Date.parse(r.created_at) }));
+    refreshExtras().catch(() => {});
     renderStats();
+    renderSide();
     const keep = current && !sheetOpen() ? current.id : null;
     rebuildQueue();
     if (!keep || !queue.length || queue[0].id !== keep) renderDeck();
@@ -678,6 +1088,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     renderMine();
   }
 
+  syncFilterUI();
   renderMine();
   if (!configured) {
     $("deck").replaceChildren(emptyEl("wifiOff", "Not connected yet", "Add the Supabase project URL and key at the top of the page's script to turn on posting."));
