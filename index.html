@@ -1,29 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-scheme="tealcoral">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Post a bill anonymously, or swipe through bills and help someone pay one directly.">
-<meta name="theme-color" content="#2f4bff">
-<title>Lift a Bill</title>
+<meta name="theme-color" content="#0b6772">
+<title>GotchU</title>
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Lift a Bill">
-<meta property="og:title" content="Lift a Bill">
-<meta property="og:description" content="Real bills from real people, posted anonymously. Swipe to help pay one directly.">
+<meta property="og:site_name" content="GotchU">
+<meta property="og:title" content="GotchU">
+<meta property="og:description" content="Real bills from real people, posted anonymously. Swipe to help cover one directly.">
 <meta property="og:url" content="https://wanheda1313.github.io/lift-a-bill/">
-<meta property="og:image" content="https://wanheda1313.github.io/lift-a-bill/og.png">
+<meta property="og:image" content="https://wanheda1313.github.io/lift-a-bill/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Lift a Bill">
-<meta name="twitter:description" content="Real bills from real people, posted anonymously. Swipe to help pay one directly.">
-<meta name="twitter:image" content="https://wanheda1313.github.io/lift-a-bill/og.png">
+<meta name="twitter:title" content="GotchU">
+<meta name="twitter:description" content="Real bills from real people, posted anonymously. Swipe to help cover one directly.">
+<meta name="twitter:image" content="https://wanheda1313.github.io/lift-a-bill/og.jpg">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Lift a Bill">
+<meta name="apple-mobile-web-app-title" content="GotchU">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,6 +43,12 @@
   --coral: #ff5d5d;
   --coral-soft: #ffe8e6;
   --gold: #ffb020;
+  --on-primary: #ffffff;
+  --action: var(--cobalt);
+  --on-action: var(--on-primary);
+  --action-glow: var(--glow);
+  --no: var(--coral);
+  --glow: rgba(47,75,255,.55);
   --ok: #10a36b;
   --shadow-lg: 0 24px 48px -20px rgba(18,20,43,.28), 0 4px 12px -4px rgba(18,20,43,.08);
   --shadow-sm: 0 6px 16px -8px rgba(18,20,43,.25);
@@ -57,6 +63,30 @@
     color-scheme: dark;
   }
 }
+/* Color schemes: set data-scheme on <html> */
+:root[data-scheme="evergreen"] { --cobalt: #0f7a63; --cobalt-deep: #0a4a3d; --cobalt-soft: #dcf2ea; --gold: #ffc857; --glow: rgba(15,122,99,.5); }
+:root[data-scheme="sunset"]    { --cobalt: #e8473b; --cobalt-deep: #b3245c; --cobalt-soft: #fde4e1; --gold: #ffd166; --glow: rgba(232,71,59,.5); }
+:root[data-scheme="plum"]      { --cobalt: #7a2fc4; --cobalt-deep: #3f1466; --cobalt-soft: #efe4fb; --gold: #ff9ec4; --glow: rgba(122,47,196,.5); }
+:root[data-scheme="midnight"]  { --cobalt: #f2a516; --cobalt-deep: #12152a; --cobalt-soft: #fdf0d5; --gold: #f2a516; --on-primary: #1b1400; --glow: rgba(242,165,22,.5); }
+@media (prefers-color-scheme: dark) {
+  :root[data-scheme="evergreen"] { --cobalt: #2fbf98; --cobalt-deep: #0f6b57; --cobalt-soft: #163a31; --on-primary: #04211a; }
+  :root[data-scheme="sunset"]    { --cobalt: #ff6a5c; --cobalt-deep: #c23a64; --cobalt-soft: #3d1f24; }
+  :root[data-scheme="plum"]      { --cobalt: #a970ff; --cobalt-deep: #4f1d80; --cobalt-soft: #2b1b45; --on-primary: #14051f; }
+  :root[data-scheme="midnight"]  { --cobalt: #ffb733; --cobalt-deep: #1a1e36; --cobalt-soft: #3a2f16; }
+}
+:root[data-scheme="tealcoral"] {
+  --bg: #f3f6f7; --surface: #ffffff; --surface-2: #eef3f4; --hair: #dde6e8; --muted: #5e6e73; --ink: #102a30;
+  --cobalt: #129a9f; --cobalt-deep: #0b6772; --cobalt-soft: #dff3f3; --gold: #ff8f7e;
+  --action: #ff6b5b; --on-action: #ffffff; --action-glow: rgba(255,107,91,.55); --no: #5e6e73; --glow: rgba(18,154,159,.45);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-scheme="tealcoral"] {
+    --bg: #0b1719; --surface: #132427; --surface-2: #1a3034; --hair: #24403f; --muted: #93abb0; --ink: #e8f3f4;
+    --cobalt: #2cc3c6; --cobalt-deep: #0c5560; --cobalt-soft: #173a3d; --gold: #ff9d8f;
+    --action: #ff7a6b; --on-action: #2a0b06; --no: #93abb0;
+  }
+}
+:root[data-scheme="midnight"] .hero { background: radial-gradient(120% 140% at 85% -20%, #2a2f55 0%, #12152a 60%); }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 html, body { margin: 0; }
@@ -74,7 +104,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .hero .inner { display: flex; flex-direction: column; gap: 18px; position: relative; z-index: 1; }
 .brand { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .logo { display: flex; align-items: center; gap: 10px; }
-.logo-mark { width: 36px; height: 36px; border-radius: 11px; background: #fff; display: grid; place-items: center; }
+.logo-mark { width: 36px; height: 36px; border-radius: 11px; background: #fff; color: var(--cobalt-deep); display: grid; place-items: center; }
 .logo-mark svg { width: 20px; height: 20px; }
 h1 { font-family: var(--font-display); font-weight: 800; font-size: 1.45rem; letter-spacing: -.02em; margin: 0; }
 .pill-anon { font-weight: 700; font-size: .78rem; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: 6px 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
@@ -89,7 +119,7 @@ h1 { font-family: var(--font-display); font-weight: 800; font-size: 1.45rem; let
 /* Main */
 main { margin-top: -52px; position: relative; z-index: 2; padding-bottom: 48px; }
 main .inner { display: flex; flex-direction: column; gap: 18px; }
-.tabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border-radius: 16px; padding: 5px; box-shadow: var(--shadow-sm); }
+.tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--surface); border-radius: 16px; padding: 5px; box-shadow: var(--shadow-sm); }
 .tabs button { font: 700 .98rem var(--font-body); background: transparent; border: 0; border-radius: 12px; padding: 11px 8px; cursor: pointer; color: var(--muted); transition: background .2s, color .2s; }
 .tabs button[aria-selected="true"] { background: var(--ink); color: var(--surface); }
 
@@ -122,7 +152,7 @@ main .inner { display: flex; flex-direction: column; gap: 18px; }
 .note p.none { color: var(--muted); font-style: italic; }
 .card-foot { padding: 12px 20px 18px; font-weight: 600; font-size: .78rem; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
 .stamp { position: absolute; top: 22px; padding: 6px 14px; border: 3px solid currentColor; border-radius: 12px; background: var(--surface); font: 800 1.4rem var(--font-display); letter-spacing: .04em; text-transform: uppercase; opacity: 0; pointer-events: none; z-index: 3; }
-.stamp.yes { right: 20px; color: var(--cobalt); transform: rotate(10deg); }
+.stamp.yes { right: 20px; color: var(--action); transform: rotate(10deg); }
 .stamp.no { left: 20px; color: var(--coral); transform: rotate(-10deg); }
 .ex-sticker { position: absolute; top: 22px; right: 20px; z-index: 2; background: var(--gold); color: #3a2600; border-radius: 999px; padding: 5px 11px; font-weight: 800; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; }
 .card.is-example .ago { display: none; }
@@ -137,8 +167,8 @@ main .inner { display: flex; flex-direction: column; gap: 18px; }
 .controls { display: flex; align-items: center; justify-content: center; gap: 22px; padding-top: 22px; }
 .round { width: 68px; height: 68px; border-radius: 50%; border: 0; box-shadow: var(--shadow-sm); cursor: pointer; display: grid; place-items: center; background: var(--surface); transition: transform .15s, box-shadow .15s; }
 .round svg { width: 28px; height: 28px; }
-.round.no { color: var(--coral); }
-.round.yes { width: 84px; height: 84px; background: linear-gradient(160deg, var(--cobalt), var(--cobalt-deep)); color: #fff; box-shadow: 0 14px 28px -10px rgba(47,75,255,.7); }
+.round.no { color: var(--no); }
+.round.yes { width: 84px; height: 84px; background: var(--action); color: var(--on-action); box-shadow: 0 14px 28px -10px var(--action-glow); }
 .round.yes svg { width: 36px; height: 36px; }
 .round.flag { width: 48px; height: 48px; color: var(--muted); }
 .round.flag svg { width: 19px; height: 19px; }
@@ -151,7 +181,7 @@ main .inner { display: flex; flex-direction: column; gap: 18px; }
 .btn { font: 700 1.02rem var(--font-body); border: 0; border-radius: 14px; padding: 14px 18px; cursor: pointer; background: var(--surface-2); color: var(--ink); transition: transform .12s, filter .12s; }
 .btn:hover:not(:disabled) { filter: brightness(.97); }
 .btn:active:not(:disabled) { transform: scale(.98); }
-.btn.go { background: var(--cobalt); color: #fff; box-shadow: 0 12px 24px -12px rgba(47,75,255,.8); }
+.btn.go { background: var(--action); color: var(--on-action); box-shadow: 0 12px 24px -12px var(--action-glow); }
 .btn.dark { background: var(--ink); color: var(--surface); }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 
@@ -187,6 +217,9 @@ form h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.7rem;
 .money-input input { border: 0; background: transparent; font-family: var(--font-display); font-weight: 800; font-size: 2.2rem; letter-spacing: -.03em; padding: 10px 6px; width: 100%; min-width: 0; }
 .money-input input::placeholder { color: var(--muted); opacity: .45; }
 .money-input input:focus { outline: none; }
+.safe { background: var(--cobalt-soft); border-radius: 14px; padding: 10px 14px; font-size: .9rem; }
+.safe summary { font-weight: 800; cursor: pointer; color: var(--ink); }
+.safe ul { margin: 8px 0 2px; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-weight: 500; }
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 380px) { .two-col { grid-template-columns: 1fr; } }
 .form-sel { appearance: none; -webkit-appearance: none; font: 500 1rem var(--font-body); background: var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23646a85' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center; border: 2px solid transparent; border-radius: 14px; padding: 13px 32px 13px 14px; width: 100%; color: var(--ink); }
@@ -235,9 +268,9 @@ textarea { resize: vertical; min-height: 100px; }
 .share-row span { flex: 1; min-width: 0; font-size: .85rem; font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .share-row button { border: 0; background: var(--ink); color: var(--surface); font: 700 .85rem var(--font-body); border-radius: 10px; padding: 8px 12px; cursor: pointer; white-space: nowrap; }
 @media (min-width: 1040px) {
-  .layout { max-width: 1200px; display: grid; grid-template-columns: minmax(0, 1fr) 440px minmax(0, 1fr); gap: 36px; align-items: start; }
+  .layout { max-width: 820px; display: grid; grid-template-columns: 440px minmax(0, 1fr); gap: 32px; align-items: start; }
   .side { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 20px; }
-  .hero .inner { max-width: 1200px; }
+  .hero .inner { max-width: 820px; }
   .hero { padding-block: 26px 84px; }
   .headline { font-size: 2.9rem; max-width: 20ch; }
   main { margin-top: -60px; }
@@ -253,6 +286,9 @@ textarea { resize: vertical; min-height: 100px; }
 .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .fchip { border: 0; background: var(--surface); color: var(--muted); font: 700 .86rem var(--font-body); border-radius: 999px; padding: 8px 13px; cursor: pointer; box-shadow: var(--shadow-sm); }
 .fchip[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.fchip.more { margin-left: auto; background: transparent; box-shadow: none; text-decoration: underline; text-underline-offset: 3px; }
+.fchip.more.on { color: var(--cobalt); }
+.more-box { flex-basis: 100%; display: flex; gap: 8px; flex-wrap: wrap; }
 .fsel { appearance: none; -webkit-appearance: none; border: 0; background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23646a85' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center; color: var(--ink); font: 700 .86rem var(--font-body); border-radius: 999px; padding: 8px 30px 8px 13px; cursor: pointer; box-shadow: var(--shadow-sm); max-width: 100%; }
 .fsel.on { background-color: var(--ink); color: var(--surface); }
 
@@ -262,7 +298,7 @@ textarea { resize: vertical; min-height: 100px; }
 .where svg { width: 13px; height: 13px; }
 .progress { margin: 12px 20px 0; display: flex; flex-direction: column; gap: 6px; }
 .progress .track { height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
-.progress .fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--cobalt), #6f86ff); }
+.progress .fill { height: 100%; border-radius: 999px; background: var(--cobalt); }
 .progress small { font-weight: 700; font-size: .82rem; color: var(--muted); }
 .progress small b { color: var(--cobalt); }
 .card.full .progress .fill { background: linear-gradient(90deg, var(--ok), #5be3a9); }
@@ -294,17 +330,24 @@ textarea { resize: vertical; min-height: 100px; }
 .feed li i.paid { background: #dcf7ea; color: var(--ok); }
 .feed li i svg { width: 15px; height: 15px; }
 .feed li small { display: block; color: var(--muted); font-weight: 600; font-size: .78rem; }
+.empty-note { margin: 0; padding: 18px; border-radius: 16px; background: var(--surface-2); color: var(--muted); font-weight: 600; text-align: center; }
 .thanks-list { display: flex; flex-direction: column; gap: 12px; }
 .thanks-list figure { margin: 0; background: var(--surface-2); border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
 .thanks-list blockquote { margin: 0; font-weight: 600; font-size: .95rem; overflow-wrap: anywhere; }
 .thanks-list blockquote::before { content: "\201C"; font-family: var(--font-display); color: var(--cobalt); font-size: 1.4em; line-height: 0; margin-right: 2px; vertical-align: -.25em; }
 .thanks-list figcaption { font-weight: 600; font-size: .78rem; color: var(--muted); }
-.thanks-mobile { margin-top: 26px; display: flex; flex-direction: column; gap: 12px; }
-.thanks-mobile h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; letter-spacing: -.02em; margin: 0; }
-@media (min-width: 1040px) { .thanks-mobile, .ticker { display: none; } }
+.thanks-view { background: var(--surface); border-radius: 28px; box-shadow: var(--shadow-lg); padding: 22px 20px; display: flex; flex-direction: column; gap: 12px; }
+.thanks-view h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; letter-spacing: -.03em; margin: 0; }
+.thanks-view > p { margin: 0 0 4px; }
+@media (min-width: 1040px) { .ticker { display: none; } }
 
 footer { display: flex; flex-direction: column; gap: 8px; font-weight: 500; font-size: .86rem; color: var(--muted); padding: 8px 2px 0; }
-footer p { margin: 0; max-width: 60ch; }
+footer p { margin: 0; max-width: 60ch; font-size: .8rem; }
+.how { list-style: none; counter-reset: h; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .82rem; }
+.how li { counter-increment: h; display: inline-flex; align-items: center; gap: 6px; }
+.how li::before { content: counter(h); width: 18px; height: 18px; border-radius: 50%; background: var(--cobalt-soft); color: var(--cobalt); font: 800 .7rem var(--font-body); display: inline-grid; place-items: center; }
+.how b { color: var(--ink); }
+.linkish { border: 0; background: none; padding: 0; font: inherit; font-weight: 700; color: var(--cobalt); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 footer strong { color: var(--ink); }
 
 canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 35; }
@@ -320,8 +363,8 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   <div class="inner">
     <div class="brand">
       <div class="logo">
-        <div class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#2f4bff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6"/><path d="M6 11l6-6 6 6"/></svg></div>
-        <h1>Lift a Bill</h1>
+        <div class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6"/><path d="M6 11l6-6 6 6"/></svg></div>
+        <h1>GotchU</h1>
       </div>
       <span class="pill-anon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Anonymous</span>
     </div>
@@ -337,33 +380,11 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
 
 <main class="gutter">
 <div class="layout">
-<aside class="side side-left" aria-label="About Lift a Bill">
-  <section class="panel">
-    <h2>How it works</h2>
-    <ol class="steps">
-      <li><b>Post a bill</b><span>Add the amount, due date and how to pay you. No name, no sign-up.</span></li>
-      <li><b>Helpers swipe</b><span>People swipe through bills and tap the heart on ones they want to help with.</span></li>
-      <li><b>Get paid directly</b><span>They send money straight to your Cash App, Venmo or fundraiser link.</span></li>
-    </ol>
-  </section>
-  <section class="panel">
-    <h2>Wall of thanks</h2>
-    <div class="thanks-list" id="thanks-side"><p class="muted">When someone's bill gets paid, their thank-you note shows up here.</p></div>
-  </section>
-  <section class="panel">
-    <h2>Stay safe</h2>
-    <ul class="tips">
-      <li>Never post bank account or card numbers. Use a payment handle or link.</li>
-      <li>Leave out your full name and address.</li>
-      <li>Helpers: posts can't be verified, so give what you're comfortable giving.</li>
-      <li>See something off? Tap the flag to report it. Three reports hide a bill.</li>
-    </ul>
-  </section>
-</aside>
 <div class="inner app">
   <div class="tabs" role="tablist">
-    <button id="tab-help" role="tab" aria-selected="true">Help someone</button>
+    <button id="tab-help" role="tab" aria-selected="true">Help</button>
     <button id="tab-ask" role="tab" aria-selected="false">Post a bill</button>
+    <button id="tab-thanks" role="tab" aria-selected="false">Shout-outs</button>
   </div>
 
   <section id="view-help">
@@ -371,8 +392,11 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       <button type="button" class="fchip" data-q="all" aria-pressed="true">All</button>
       <button type="button" class="fchip" data-q="small" aria-pressed="false">Under $50</button>
       <button type="button" class="fchip" data-q="week" aria-pressed="false">Due this week</button>
-      <select class="fsel" id="f-kind-filter" aria-label="Bill type"><option value="">Any type</option></select>
-      <select class="fsel" id="f-area-filter" aria-label="Area"><option value="">Any area</option></select>
+      <button type="button" class="fchip more" id="more-filters" aria-expanded="false">More</button>
+      <div class="more-box" id="more-box" hidden>
+        <select class="fsel" id="f-kind-filter" aria-label="Bill type"><option value="">Any type</option></select>
+        <select class="fsel" id="f-area-filter" aria-label="State"><option value="">Any state</option></select>
+      </div>
     </div>
     <div class="deck" id="deck">
       <div class="empty"><div class="big" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div><strong>Loading bills…</strong><span>Bills people post show up here as cards.</span></div>
@@ -385,12 +409,15 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
       <button class="round yes" id="btn-help" disabled aria-label="Help pay this bill">
-        <svg viewBox="0 0 24 24" fill="currentColor" stroke="#1d1a2f" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg>
       </button>
     </div>
-    <p class="hint" style="margin-top:16px">Drag the card, tap the buttons, or use ← → on a keyboard.</p>
-    <div class="thanks-mobile" id="thanks-mobile-wrap" hidden>
-      <h2>Wall of thanks</h2>
+  </section>
+
+  <section id="view-thanks" hidden>
+    <div class="thanks-view">
+      <h2>Shout-outs</h2>
+      <p class="muted">Thank-you notes from people whose bills got covered. Every one of these started with a swipe.</p>
       <div class="thanks-list" id="thanks-mobile"></div>
     </div>
   </section>
@@ -399,6 +426,14 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     <div style="display:flex;flex-direction:column;gap:18px">
       <form id="ask-form" novalidate>
         <h2>Post a bill</h2>
+        <details class="safe">
+          <summary>Stay safe when posting</summary>
+          <ul>
+            <li>Never post bank account or card numbers. Use a Cash App, Venmo or fundraiser link.</li>
+            <li>Leave out your full name, address and anything that identifies you.</li>
+            <li>Mark your bill paid once it's covered so others can help someone else.</li>
+          </ul>
+        </details>
         <fieldset class="field">
           <legend>What kind of bill?</legend>
           <div class="chips" id="kind-chips"></div>
@@ -413,7 +448,7 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
             <input id="f-due" type="date">
           </div>
           <div class="field">
-            <label for="f-area">Area <span style="opacity:.6">(optional)</span></label>
+            <label for="f-area">State <span style="opacity:.6">(optional)</span></label>
             <select id="f-area" class="form-sel"><option value="">Choose one</option></select>
           </div>
         </div>
@@ -437,20 +472,15 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   </section>
 
   <footer>
-    <p><strong>How it works:</strong> nobody signs in and no names are stored. Helpers pay people directly through the link on each bill. This site never touches money.</p>
-    <p>Posts can't be verified, so only give what you're comfortable giving. Bills reported 3 times get hidden, and bills disappear 2 weeks after their due date.</p>
+    <ol class="how">
+      <li><b>Post</b> a bill, no name needed</li>
+      <li><b>Helpers swipe</b> and pick one</li>
+      <li><b>Paid directly</b> to your Cash App or Venmo</li>
+    </ol>
+    <p>This site never touches money and posts can't be verified. Bills reported 3 times are hidden; bills drop off 2 weeks after they're due. <button type="button" class="linkish" id="share-copy">Copy site link</button></p>
   </footer>
 </div>
 <aside class="side side-right" aria-label="Bill activity and resources">
-  <section class="panel">
-    <h2>Right now</h2>
-    <div class="mini-stats">
-      <div><b id="sd-soon">–</b><small>due in the next 7 days</small></div>
-      <div><b id="sd-avg">–</b><small>average bill</small></div>
-    </div>
-    <h3>Bills by type</h3>
-    <div class="bars" id="sd-bars"><p class="muted">A breakdown shows up here as bills come in.</p></div>
-  </section>
   <section class="panel">
     <h2>Live activity</h2>
     <ul class="feed" id="feed"><li class="muted" style="display:block">Lifts and paid bills show up here as they happen.</li></ul>
@@ -460,11 +490,6 @@ canvas#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     <p>Call or text <b>211</b> for free, confidential help finding local rent, utility and food assistance.</p>
     <a class="link-btn" href="https://www.211.org" target="_blank" rel="noopener noreferrer">Visit 211.org</a>
     <p class="muted">Many utilities also offer payment plans. Ask yours before the due date.</p>
-  </section>
-  <section class="panel share">
-    <h2>Spread the word</h2>
-    <p>Every share puts more bills in front of people who can help.</p>
-    <div class="share-row"><span id="share-url"></span><button type="button" id="share-copy">Copy link</button></div>
   </section>
 </aside>
 </div>
@@ -528,8 +553,7 @@ const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
     ["Phone", "phone", "#8b5cf6"], ["Internet", "wifi", "#14b8a6"], ["Car payment", "car", "#ec4899"], ["Car insurance", "shield", "#22a06b"],
     ["Medical", "plus", "#ef4444"], ["Childcare", "child", "#d97706"], ["Groceries", "cart", "#16a34a"], ["Other", "dots", "#64748b"]
   ];
-  const AREAS = ["Long Beach", "South LA", "Downtown LA", "East LA", "Hollywood / Mid-City", "Westside", "South Bay",
-    "San Fernando Valley", "San Gabriel Valley", "Antelope Valley", "Orange County", "Inland Empire", "Elsewhere"];
+  const AREAS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming", "Puerto Rico", "Outside the US"];
   const KIND = Object.fromEntries(KINDS.map(([n, e, c]) => [n, { e, c }]));
   // Sample cards so new visitors can see how it works. Clearly labeled, never saved, no real payment info.
   const EXAMPLES = [
@@ -575,7 +599,11 @@ const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
   AREAS.forEach((a) => { const o = new Option(a, a); $("f-area").add(o); $("f-area-filter").add(new Option(a, a)); });
   KINDS.forEach(([n]) => $("f-kind-filter").add(new Option(n, n)));
   function syncFilterUI() {
-    document.querySelectorAll(".fchip").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.q === filt.q)));
+    document.querySelectorAll(".fchip[data-q]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.q === filt.q)));
+    const extra = !!filt.kind || !!filt.area;
+    $("more-filters").classList.toggle("on", extra);
+    $("more-filters").textContent = extra ? "More (" + ((filt.kind ? 1 : 0) + (filt.area ? 1 : 0)) + ")" : "More";
+    if (extra) $("more-box").hidden = false;
     $("f-kind-filter").value = filt.kind; $("f-area-filter").value = filt.area;
     $("f-kind-filter").classList.toggle("on", !!filt.kind); $("f-area-filter").classList.toggle("on", !!filt.area);
   }
@@ -583,7 +611,8 @@ const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
     Object.assign(filt, patch); store("lab-filters", filt); syncFilterUI();
     if (sheetOpen()) return; rebuildQueue(); renderDeck();
   }
-  document.querySelectorAll(".fchip").forEach((b) => { b.onclick = () => setFilter({ q: b.dataset.q }); });
+  document.querySelectorAll(".fchip[data-q]").forEach((b) => { b.onclick = () => setFilter({ q: b.dataset.q }); });
+  $("more-filters").onclick = () => { const box = $("more-box"); box.hidden = !box.hidden; $("more-filters").setAttribute("aria-expanded", String(!box.hidden)); };
   $("f-kind-filter").onchange = (e) => setFilter({ kind: e.target.value });
   $("f-area-filter").onchange = (e) => setFilter({ area: e.target.value });
   const filtersOn = () => filt.q !== "all" || !!filt.kind || !!filt.area;
@@ -601,15 +630,16 @@ const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
 
   // Tabs
   function showTab(which) {
-    const help = which === "help";
-    $("tab-help").setAttribute("aria-selected", help);
-    $("tab-ask").setAttribute("aria-selected", !help);
-    $("view-help").hidden = !help;
-    $("view-ask").hidden = help;
+    ["help", "ask", "thanks"].forEach((t) => {
+      $("tab-" + t).setAttribute("aria-selected", String(t === which));
+      $("view-" + t).hidden = t !== which;
+    });
   }
   $("tab-help").onclick = () => showTab("help");
   $("tab-ask").onclick = () => showTab("ask");
+  $("tab-thanks").onclick = () => showTab("thanks");
   if (location.hash === "#post") showTab("ask");
+  if (location.hash === "#thanks" || location.hash === "#shoutouts") showTab("thanks");
 
   const money = (n) => "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const moneyShort = (n) => "$" + Math.round(n).toLocaleString("en-US");
@@ -699,34 +729,12 @@ const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
     if (!filtersOn()) queue = queue.concat(EXAMPLES.filter((b) => !seen.has(b.id)));
   }
 
-  function renderSide() {
-    const today = new Date(); today.setHours(0, 0, 0, 0);
-    const week = new Date(today.getTime() + 7 * 864e5);
-    const soon = bills.filter((b) => b.due && new Date(b.due + "T12:00:00") <= week);
-    $("sd-soon").textContent = soon.length.toLocaleString("en-US");
-    $("sd-avg").textContent = bills.length ? moneyShort(bills.reduce((s, b) => s + b.amount, 0) / bills.length) : "–";
-    const counts = {};
-    bills.forEach((b) => { counts[b.kind] = (counts[b.kind] || 0) + 1; });
-    const rows = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 6);
-    const box = $("sd-bars"); box.replaceChildren();
-    if (!rows.length) { const p = document.createElement("p"); p.className = "muted"; p.textContent = "A breakdown shows up here as bills come in."; box.append(p); return; }
-    const max = rows[0][1];
-    rows.forEach(([kind, n]) => {
-      const r = document.createElement("div"); r.className = "bar";
-      const l = document.createElement("span"); l.textContent = kind;
-      const t = document.createElement("div"); t.className = "track";
-      const f = document.createElement("div"); f.className = "fill"; f.style.width = Math.max(6, (n / max) * 100) + "%"; f.style.background = (KIND[kind] || KIND.Other).c;
-      t.append(f);
-      const e = document.createElement("em"); e.textContent = n;
-      r.append(l, t, e); box.append(r);
-    });
-  }
+  function renderSide() {}
   const siteUrl = location.origin + location.pathname;
-  $("share-url").textContent = siteUrl.replace(/^https?:\/\//, "");
   $("share-copy").onclick = async () => {
     try { await navigator.clipboard.writeText(siteUrl); $("share-copy").textContent = "Copied!"; }
-    catch (e) { const r = document.createRange(); r.selectNodeContents($("share-url")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); $("share-copy").textContent = "Selected"; }
-    setTimeout(() => { $("share-copy").textContent = "Copy link"; }, 2000);
+    catch (e) { toast(siteUrl); }
+    setTimeout(() => { $("share-copy").textContent = "Copy site link"; }, 2000);
   };
 
   function renderStats() {
@@ -815,7 +823,7 @@ const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
     $("hp-kicker").textContent = b.example ? "Example" : "You picked one!";
     $("hp-fine").textContent = b.example
       ? "On a real bill, this box shows the person's Cash App, Venmo, or fundraiser link. You send money to them directly."
-      : "Money goes straight from you to them. Every little bit counts, even $5.";
+      : "Money goes straight from you to them. Posts can't be verified, so give what you're comfortable giving. Something off? Use the flag button.";
     $("hp-copy").hidden = !!b.example;
     const how = $("hp-how");
     how.replaceChildren();
@@ -912,7 +920,8 @@ const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const colors = ["#2f4bff", "#ff5d5d", "#ffb020", "#5b74ff", "#ffffff"];
+    const cs = getComputedStyle(document.documentElement);
+    const colors = ["--action", "--cobalt", "--gold", "--cobalt-deep"].map((v) => cs.getPropertyValue(v).trim() || "#888").concat(["#ffffff"]);
     for (let i = 0; i < 70; i++) {
       parts.push({ x: innerWidth / 2, y: innerHeight * 0.55, vx: (Math.random() - 0.5) * 14, vy: -Math.random() * 15 - 5,
         r: Math.random() * 6 + 4, a: Math.random() * 6, va: (Math.random() - 0.5) * 0.4, c: colors[i % colors.length], life: 0 });
@@ -983,7 +992,7 @@ const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
         paid.onclick = () => {
           if (row.querySelector(".paid-form")) return;
           const f = document.createElement("div"); f.className = "paid-form";
-          const lab = document.createElement("label"); lab.className = "small"; lab.textContent = "Leave a thank-you for the wall (optional, no names):"; lab.htmlFor = "thx-" + m.id;
+          const lab = document.createElement("label"); lab.className = "small"; lab.textContent = "Leave a shout-out for the people who helped (optional, no names):"; lab.htmlFor = "thx-" + m.id;
           const ta = document.createElement("textarea"); ta.id = "thx-" + m.id; ta.maxLength = 280; ta.placeholder = "Lights are back on. Thank you to whoever helped!";
           const a2 = document.createElement("div"); a2.className = "acts";
           const ok = document.createElement("button"); ok.textContent = "Mark as paid";
@@ -1018,7 +1027,7 @@ const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
 
   // Activity, thanks, totals
   function activityText(e) {
-    const where = e.area && e.area !== "Elsewhere" ? ` in ${e.area}` : "";
+    const where = e.area && e.area !== "Outside the US" ? ` in ${e.area}` : "";
     const kind = (e.bill_kind || "bill").toLowerCase();
     const art = /^[aeiou]/.test(kind) ? "an" : "a";
     return e.kind === "paid"
@@ -1055,16 +1064,13 @@ const SUPABASE_KEY = (window.LAB_CONFIG && window.LAB_CONFIG.key) || "";
     const f = document.createElement("figure");
     const q = document.createElement("blockquote"); q.textContent = t.thanks;
     const c = document.createElement("figcaption");
-    c.textContent = `${t.bill_kind} bill · ${moneyShort(t.amount)}${t.area && t.area !== "Elsewhere" ? " · " + t.area : ""} · ${ago(Date.parse(t.paid_at))}`;
+    c.textContent = `${t.bill_kind} bill · ${moneyShort(t.amount)}${t.area && t.area !== "Outside the US" ? " · " + t.area : ""} · ${ago(Date.parse(t.paid_at))}`;
     f.append(q, c); return f;
   }
   function renderThanks() {
-    const side = $("thanks-side"); side.replaceChildren();
     const mob = $("thanks-mobile"); mob.replaceChildren();
-    $("thanks-mobile-wrap").hidden = !thanks.length;
-    if (!thanks.length) { const p = document.createElement("p"); p.className = "muted"; p.textContent = "When someone's bill gets paid, their thank-you note shows up here."; side.append(p); return; }
-    thanks.slice(0, 5).forEach((t) => side.append(thanksFigure(t)));
-    thanks.slice(0, 3).forEach((t) => mob.append(thanksFigure(t)));
+    if (!thanks.length) { const p = document.createElement("p"); p.className = "empty-note"; p.textContent = "No shout-outs yet. When someone's bill gets covered, their thank-you shows up here."; mob.append(p); return; }
+    thanks.forEach((t) => mob.append(thanksFigure(t)));
   }
   async function refreshExtras() {
     const [a, t, tot] = await Promise.all([

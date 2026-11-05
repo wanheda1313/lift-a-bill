@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#12142b">
+<title>GotchU Moderation</title>
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: dark ink header band, then a single column of post rows for review. Same tokens as the public site. */
+:root {
+  --bg: #eef0f7; --surface: #ffffff; --surface-2: #f5f6fb; --ink: #12142b; --muted: #646a85; --hair: #e2e5f0;
+  --cobalt: #2f4bff; --cobalt-soft: #e7eaff; --coral: #ff5d5d; --coral-soft: #ffe8e6; --gold: #ffb020; --gold-soft: #fff1d6; --ok: #10a36b; --ok-soft: #dcf7ea;
+  --shadow-sm: 0 6px 16px -8px rgba(18,20,43,.25);
+  --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0d0f1e; --surface: #181b31; --surface-2: #20243f; --ink: #eef0ff; --muted: #9aa0bf; --hair: #2a2f50;
+    --cobalt: #5b74ff; --cobalt-soft: #232a5c; --coral: #ff7070; --coral-soft: #3a2030; --gold: #ffc04d; --gold-soft: #3a2f16; --ok: #3fd39a; --ok-soft: #173a2f;
+    --shadow-sm: 0 6px 16px -8px rgba(0,0,0,.6); color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+[hidden] { display: none !important; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); background: #12142b; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.45; min-height: 100vh; }
+button, input { font-family: inherit; color: inherit; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.inner { max-width: 720px; margin: 0 auto; }
+.top { background: #12142b; color: #fff; padding-block: 18px; }
+.top .inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; font: 800 1.2rem var(--font-display); letter-spacing: -.02em; }
+.brand i { width: 32px; height: 32px; border-radius: 10px; background: #0b6772; display: grid; place-items: center; }
+.brand i svg { width: 18px; height: 18px; }
+.brand small { font: 700 .72rem var(--font-body); letter-spacing: .08em; text-transform: uppercase; background: rgba(255,255,255,.14); border-radius: 999px; padding: 4px 9px; }
+.top a, .top button { color: #fff; font-weight: 700; font-size: .9rem; background: rgba(255,255,255,.12); border: 0; border-radius: 10px; padding: 8px 12px; text-decoration: none; cursor: pointer; }
+main { padding-block: 22px 48px; }
+main .inner { display: flex; flex-direction: column; gap: 16px; }
+
+.login { background: var(--surface); border-radius: 22px; box-shadow: var(--shadow-sm); padding: 24px; display: flex; flex-direction: column; gap: 14px; max-width: 420px; }
+.login h1 { font: 800 1.6rem var(--font-display); letter-spacing: -.03em; margin: 0; }
+.login p { margin: 0; color: var(--muted); font-weight: 500; }
+.login input { font: 600 1rem var(--font-body); background: var(--surface-2); border: 2px solid transparent; border-radius: 12px; padding: 13px 14px; width: 100%; }
+.login input:focus { outline: none; border-color: var(--cobalt); }
+.btn { font: 700 1rem var(--font-body); border: 0; border-radius: 12px; padding: 13px 16px; cursor: pointer; background: var(--cobalt); color: #fff; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.err { color: var(--coral); font-weight: 700; margin: 0; }
+.err:empty { display: none; }
+
+.summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.summary div { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-sm); padding: 12px 14px; display: flex; flex-direction: column; min-width: 0; }
+.summary b { font: 800 1.5rem var(--font-display); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.summary small { font-weight: 600; font-size: .78rem; color: var(--muted); }
+@media (max-width: 520px) { .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.tabs button { border: 0; background: var(--surface); color: var(--muted); font: 700 .9rem var(--font-body); border-radius: 999px; padding: 8px 14px; cursor: pointer; box-shadow: var(--shadow-sm); }
+.tabs button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.search { font: 600 .95rem var(--font-body); background: var(--surface); border: 0; border-radius: 12px; padding: 11px 14px; box-shadow: var(--shadow-sm); width: 100%; }
+
+.row { background: var(--surface); border-radius: 18px; box-shadow: var(--shadow-sm); padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; border-left: 5px solid transparent; }
+.row.reported { border-left-color: var(--gold); }
+.row.hidden-post { border-left-color: var(--coral); opacity: .92; }
+.row.paid { border-left-color: var(--ok); }
+.row-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.row-head h2 { margin: 0; font: 800 1.15rem var(--font-display); letter-spacing: -.02em; }
+.row-head h2 span { color: var(--muted); font-weight: 700; }
+.code { font: 700 .82rem ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; color: var(--muted); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-weight: 800; font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; border-radius: 999px; padding: 4px 9px; background: var(--surface-2); color: var(--muted); }
+.chip.warn { background: var(--gold-soft); color: #9a6200; }
+.chip.bad { background: var(--coral-soft); color: var(--coral); }
+.chip.good { background: var(--ok-soft); color: var(--ok); }
+@media (prefers-color-scheme: dark) { .chip.warn { color: var(--gold); } }
+.field { display: grid; grid-template-columns: 92px 1fr; gap: 10px; font-size: .94rem; }
+.field b { font-weight: 700; color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; padding-top: 2px; }
+.field span { min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 4px; }
+.actions button { border: 0; border-radius: 10px; padding: 9px 13px; font: 700 .88rem var(--font-body); cursor: pointer; background: var(--surface-2); }
+.actions .hide { background: var(--gold-soft); color: #9a6200; }
+.actions .restore { background: var(--ok-soft); color: var(--ok); }
+.actions .del { background: var(--coral-soft); color: var(--coral); }
+.actions .del.armed { background: var(--coral); color: #fff; }
+@media (prefers-color-scheme: dark) { .actions .hide { color: var(--gold); } }
+.actions button:disabled { opacity: .5; }
+.empty { background: var(--surface); border-radius: 18px; padding: 28px; text-align: center; color: var(--muted); font-weight: 600; box-shadow: var(--shadow-sm); }
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--surface); font-weight: 700; padding: 11px 16px; border-radius: 12px; z-index: 10; max-width: calc(100% - 32px); text-align: center; }
+</style>
+</head>
+<body>
+<div class="top gutter">
+  <div class="inner">
+    <div class="brand"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6"/><path d="M6 11l6-6 6 6"/></svg></i>GotchU <small>Moderation</small></div>
+    <div style="display:flex;gap:8px">
+      <a href="./">Open site</a>
+      <button type="button" id="logout" hidden>Lock</button>
+    </div>
+  </div>
+</div>
+
+<main class="gutter">
+  <div class="inner">
+    <form class="login" id="login" novalidate>
+      <h1>Moderator sign-in</h1>
+      <p>Enter your moderation passcode. Five wrong tries locks this page for 15 minutes.</p>
+      <label for="pass" style="font-weight:700;font-size:.85rem;color:var(--muted)">Passcode</label>
+      <input id="pass" type="password" autocomplete="current-password" required>
+      <button class="btn" type="submit" id="login-btn">Unlock</button>
+      <p class="err" id="login-err" aria-live="polite"></p>
+    </form>
+
+    <section id="panel" hidden style="display:flex;flex-direction:column;gap:16px">
+      <div class="summary">
+        <div><b id="s-open">0</b><small>open bills</small></div>
+        <div><b id="s-rep">0</b><small>reported</small></div>
+        <div><b id="s-hid">0</b><small>hidden</small></div>
+        <div><b id="s-paid">0</b><small>paid</small></div>
+      </div>
+      <div class="tabs" role="group" aria-label="Show">
+        <button type="button" data-v="review" aria-pressed="true">Needs review</button>
+        <button type="button" data-v="open" aria-pressed="false">Open</button>
+        <button type="button" data-v="hidden" aria-pressed="false">Hidden</button>
+        <button type="button" data-v="thanks" aria-pressed="false">Thank-you notes</button>
+        <button type="button" data-v="all" aria-pressed="false">Everything</button>
+      </div>
+      <input class="search" id="q" type="search" placeholder="Search by code (like 3F2A9C), words, or payment handle" aria-label="Search posts">
+      <div id="list" style="display:flex;flex-direction:column;gap:12px"></div>
+    </section>
+  </div>
+</main>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="config.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const CFG = window.LAB_CONFIG || {};
+  let pass = "", rows = [], view = "review";
+  try { pass = sessionStorage.getItem("lab-mod") || ""; } catch (e) {}
+
+  async function rpc(name, args) {
+    const res = await fetch(String(CFG.url || "").replace(/\/$/, "") + "/rest/v1/rpc/" + name, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", apikey: CFG.key, Authorization: "Bearer " + CFG.key },
+      body: JSON.stringify(args || {})
+    });
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : null;
+    if (!res.ok) throw new Error((data && data.message) || "Request failed");
+    return data;
+  }
+  let tt = null;
+  function toast(t) { const n = $("toast"); n.textContent = t; n.hidden = false; clearTimeout(tt); tt = setTimeout(() => { n.hidden = true; }, 2800); }
+  const money = (n) => "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const code = (id) => String(id).slice(0, 6).toUpperCase();
+  function when(iso) {
+    if (!iso) return "";
+    const d = new Date(iso), m = Math.round((Date.now() - d) / 60000);
+    if (m < 60) return Math.max(1, m) + "m ago";
+    if (m < 2880) return Math.round(m / 60) + "h ago";
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  }
+  const state = (r) => r.paid_at ? "paid" : r.reports >= 3 ? "hidden" : "open";
+
+  const loginMsg = { bad: "That passcode isn't right.", locked: "Too many wrong tries. Wait 15 minutes, then try again.", unset: "No passcode has been set yet. Set one in Supabase first." };
+  $("login").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const p = $("pass").value;
+    if (!p) return;
+    $("login-btn").disabled = true; $("login-err").textContent = "";
+    try {
+      const r = await rpc("lab_admin_login", { p_pass: p });
+      if (r === "ok") { pass = p; try { sessionStorage.setItem("lab-mod", p); } catch (e) {} $("pass").value = ""; await enter(); }
+      else $("login-err").textContent = loginMsg[r] || "Couldn't sign in.";
+    } catch (err) { $("login-err").textContent = "Couldn't reach the database. Check your connection."; }
+    finally { $("login-btn").disabled = false; }
+  });
+  function lock(msg) {
+    pass = ""; try { sessionStorage.removeItem("lab-mod"); } catch (e) {}
+    $("panel").hidden = true; $("logout").hidden = true; $("login").hidden = false;
+    $("login-err").textContent = msg || ""; $("pass").focus();
+  }
+  $("logout").onclick = () => lock();
+
+  async function load() {
+    const data = await rpc("lab_admin_list", { p_pass: pass });
+    rows = (data || []).map((r) => ({ ...r, amount: Number(r.amount), lifted: Number(r.lifted || 0) }));
+    render();
+  }
+  async function enter() {
+    await load();
+    $("login").hidden = true; $("panel").hidden = false; $("logout").hidden = false;
+  }
+
+  document.querySelectorAll(".tabs button").forEach((b) => b.onclick = () => {
+    view = b.dataset.v;
+    document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    render();
+  });
+  $("q").addEventListener("input", render);
+
+  function field(label, value) {
+    const f = document.createElement("div"); f.className = "field";
+    const b = document.createElement("b"); b.textContent = label;
+    const s = document.createElement("span"); s.textContent = value;
+    f.append(b, s); return f;
+  }
+  function chip(text, cls) { const c = document.createElement("span"); c.className = "chip " + (cls || ""); c.textContent = text; return c; }
+
+  function render() {
+    const open = rows.filter((r) => state(r) === "open");
+    $("s-open").textContent = open.length;
+    $("s-rep").textContent = open.filter((r) => r.reports > 0).length;
+    $("s-hid").textContent = rows.filter((r) => state(r) === "hidden").length;
+    $("s-paid").textContent = rows.filter((r) => r.paid_at).length;
+
+    const q = $("q").value.trim().toLowerCase().replace(/^#/, "");
+    let list = rows.filter((r) => {
+      const st = state(r);
+      if (view === "review" && !(st === "open" && r.reports > 0)) return false;
+      if (view === "open" && st !== "open") return false;
+      if (view === "hidden" && st !== "hidden") return false;
+      if (view === "thanks" && !r.thanks) return false;
+      if (q) {
+        const hay = [r.id, r.kind, r.note, r.how, r.area, r.thanks].join(" ").toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+    const box = $("list"); box.replaceChildren();
+    if (!list.length) {
+      const e = document.createElement("div"); e.className = "empty";
+      e.textContent = view === "review" ? "Nothing reported right now. Check “Open” to look through everything that's live." : "No posts here.";
+      box.append(e); return;
+    }
+    list.forEach((r) => box.append(rowEl(r)));
+  }
+
+  function rowEl(r) {
+    const st = state(r);
+    const el = document.createElement("article");
+    el.className = "row" + (st === "hidden" ? " hidden-post" : st === "paid" ? " paid" : r.reports > 0 ? " reported" : "");
+    const head = document.createElement("div"); head.className = "row-head";
+    const h = document.createElement("h2"); h.textContent = money(r.amount) + " ";
+    const k = document.createElement("span"); k.textContent = r.kind; h.append(k);
+    const c = document.createElement("span"); c.className = "code"; c.textContent = "#" + code(r.id) + " · " + when(r.created_at);
+    head.append(h, c);
+    const chips = document.createElement("div"); chips.className = "chips";
+    if (st === "hidden") chips.append(chip("Hidden from site", "bad"));
+    else if (st === "paid") chips.append(chip("Paid", "good"));
+    else chips.append(chip("Live on site"));
+    if (r.reports > 0) chips.append(chip(r.reports + (r.reports === 1 ? " report" : " reports"), "warn"));
+    if (r.lifted > 0) chips.append(chip(money(r.lifted) + " lifted"));
+    el.append(head, chips);
+    el.append(field("Story", r.note || "(none)"), field("Pay via", r.how || "(none)"));
+    if (r.area) el.append(field("Area", r.area));
+    if (r.due) el.append(field("Due", new Date(r.due + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })));
+    if (r.thanks) el.append(field("Thank-you", r.thanks));
+
+    const acts = document.createElement("div"); acts.className = "actions";
+    const btn = (label, cls, action, after) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = label; b.className = cls;
+      b.onclick = async () => {
+        if (action === "delete" && !b.classList.contains("armed")) { b.classList.add("armed"); b.textContent = "Tap again to delete for good"; return; }
+        acts.querySelectorAll("button").forEach((x) => x.disabled = true);
+        try {
+          const res = await rpc("lab_admin_action", { p_pass: pass, p_id: r.id, p_action: action });
+          if (res === "bad" || res === "locked" || res === "unset") { lock(loginMsg[res]); return; }
+          if (res !== "ok") throw new Error(res);
+          toast(after); await load();
+        } catch (e) { toast("That didn't work. Try again."); acts.querySelectorAll("button").forEach((x) => x.disabled = false); }
+      };
+      return b;
+    };
+    if (st === "hidden") acts.append(btn("Restore to site", "restore", "restore", "Restored. It's live again."));
+    else if (st === "open") {
+      acts.append(btn("Hide from site", "hide", "hide", "Hidden from the site."));
+      if (r.reports > 0) acts.append(btn("Looks fine, clear reports", "restore", "restore", "Reports cleared."));
+    }
+    if (r.thanks) acts.append(btn("Remove thank-you", "hide", "clear_thanks", "Thank-you note removed."));
+    acts.append(btn("Delete", "del", "delete", "Deleted."));
+    el.append(acts);
+    return el;
+  }
+
+  if (pass) {
+    rpc("lab_admin_login", { p_pass: pass }).then((r) => r === "ok" ? enter() : lock(loginMsg[r])).catch(() => lock());
+  } else $("pass").focus();
+  setInterval(() => { if (pass && !document.hidden) load().catch(() => {}); }, 60000);
+})();
+</script>
+</body>
+</html>
