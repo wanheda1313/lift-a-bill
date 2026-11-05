@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Post a bill anonymously, or swipe through bills and help someone pay one directly.">
+<title>Lift a Bill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+[hidden]{display:none!important}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
+
+/* Layout: one narrow column; a stack of paper bill stubs you swipe, with a tab to post your own. */
+:root {
+  --bg: #e9eef0;
+  --paper: #fbfcf8;
+  --ink: #17242b;
+  --muted: #5d6b72;
+  --line: #c9d3d6;
+  --help: #0f7a5c;
+  --help-soft: #d6efe5;
+  --pass: #8a5a44;
+  --pass-soft: #f1e2d9;
+  --stamp: #c2432b;
+  --font-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111a1e; --paper: #1b262b; --ink: #e6ecec; --muted: #93a2a8; --line: #2f3d43;
+    --help: #48c39a; --help-soft: #173a2f; --pass: #d39b80; --pass-soft: #3a2a22; --stamp: #f07a60;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111a1e; --paper: #1b262b; --ink: #e6ecec; --muted: #93a2a8; --line: #2f3d43;
+  --help: #48c39a; --help-soft: #173a2f; --pass: #d39b80; --pass-soft: #3a2a22; --stamp: #f07a60;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 460px; margin: 0 auto; padding-block: 20px 40px; display: flex; flex-direction: column; gap: 18px; }
+header { display: flex; flex-direction: column; gap: 4px; }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: 2.1rem; letter-spacing: -0.02em; margin: 0; line-height: 1; text-wrap: balance; }
+.tag { color: var(--muted); margin: 0; }
+.tabs { display: grid; grid-template-columns: 1fr 1fr; border: 1.5px solid var(--ink); border-radius: 999px; overflow: hidden; }
+.tabs button { font: 600 0.95rem var(--font-body); background: transparent; color: var(--ink); border: 0; padding: 10px; cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--help); outline-offset: 2px; }
+
+/* Card stack */
+.deck { position: relative; height: 430px; touch-action: pan-y; }
+.stub {
+  position: absolute; inset: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 6px;
+  box-shadow: 0 10px 30px -18px rgba(0,0,0,.45); display: flex; flex-direction: column; overflow: hidden;
+  user-select: none; will-change: transform; transition: transform .25s ease;
+}
+.stub.back { transform: translateY(10px) scale(.96); }
+.stub.dragging { transition: none; }
+.stub-head { padding: 16px 18px 12px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.kind { font: 600 0.72rem var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.posted { font: 400 0.72rem var(--font-mono); color: var(--muted); }
+.amount-row { padding: 0 18px 14px; border-bottom: 2px dashed var(--line); display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.label { font: 600 0.68rem var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); display: block; }
+.amount { font-family: var(--font-mono); font-weight: 600; font-size: 2.4rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.due { text-align: right; font-family: var(--font-mono); font-size: .95rem; }
+.due.soon { color: var(--stamp); font-weight: 600; }
+.note { padding: 14px 18px; flex: 1; min-height: 0; overflow-y: auto; font-size: 1.02rem; }
+.note p { margin: 0; overflow-wrap: anywhere; }
+.anon { padding: 10px 18px; font: 400 .72rem var(--font-mono); color: var(--muted); border-top: 1px solid var(--line); }
+.verdict {
+  position: absolute; top: 22px; padding: 4px 10px; border: 3px solid currentColor; border-radius: 4px;
+  font: 800 1.3rem var(--font-display); letter-spacing: .05em; text-transform: uppercase; opacity: 0; pointer-events: none;
+}
+.verdict.help { left: 18px; color: var(--help); transform: rotate(-10deg); }
+.verdict.pass { right: 18px; color: var(--pass); transform: rotate(10deg); }
+
+.empty {
+  height: 100%; border: 2px dashed var(--line); border-radius: 6px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; gap: 10px; padding: 24px; color: var(--muted);
+}
+.empty strong { color: var(--ink); font-family: var(--font-display); font-size: 1.3rem; }
+
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.btn { font: 600 1rem var(--font-body); padding: 13px 14px; border-radius: 999px; cursor: pointer; border: 1.5px solid transparent; }
+.btn-pass { background: var(--pass-soft); color: var(--pass); border-color: var(--pass); }
+.btn-help { background: var(--help); color: var(--paper); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.hint { text-align: center; color: var(--muted); font-size: .85rem; margin: 0; }
+
+/* Help panel */
+.panel { background: var(--help-soft); border: 1.5px solid var(--help); border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.panel h2 { font: 800 1.2rem var(--font-display); margin: 0; }
+.howto { font-family: var(--font-mono); background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; overflow-wrap: anywhere; user-select: all; }
+.howto a { color: var(--help); }
+.panel .row { display: flex; gap: 10px; flex-wrap: wrap; }
+.warn { font-size: .85rem; color: var(--muted); margin: 0; }
+
+/* Form */
+form { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.field label { font: 600 .72rem var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+input, select, textarea { font: 400 1rem var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 10px; width: 100%; }
+textarea { resize: vertical; min-height: 90px; }
+.small { font-size: .82rem; color: var(--muted); margin: 0; }
+.msg { font-size: .9rem; margin: 0; }
+.msg.err { color: var(--stamp); }
+.msg.ok { color: var(--help); }
+.mine { display: flex; flex-direction: column; gap: 8px; }
+.mine h2 { font: 800 1.1rem var(--font-display); margin: 6px 0 0; }
+.mine-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+.mine-item span { font-family: var(--font-mono); font-size: .9rem; min-width: 0; overflow-wrap: anywhere; }
+.mine-item button { font: 600 .85rem var(--font-body); background: transparent; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.notice { background: var(--pass-soft); color: var(--ink); border-radius: 6px; padding: 12px 14px; font-size: .9rem; }
+
+.report { align-self: center; background: none; border: 0; color: var(--muted); font: 500 .85rem var(--font-body); text-decoration: underline; cursor: pointer; padding: 4px 8px; }
+footer { border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: .85rem; }
+footer p { margin: 0; max-width: 65ch; }
+@media (prefers-reduced-motion: reduce) { .stub { transition: none; } }
+@media (max-width: 380px) { .two { grid-template-columns: 1fr; } .amount { font-size: 2rem; } }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <h1>Lift a Bill</h1>
+    <p class="tag">Real bills, posted anonymously. Swipe right to help pay one, left to pass.</p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button id="tab-help" role="tab" aria-selected="true">Help someone</button>
+    <button id="tab-ask" role="tab" aria-selected="false">Post a bill</button>
+  </div>
+
+  <div id="notice" class="notice" hidden></div>
+
+  <section id="view-help">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="deck" id="deck">
+        <div class="empty">
+          <strong>Loading bills…</strong>
+          <span>Bills people post show up here as cards.</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-pass" id="btn-pass" disabled>Pass</button>
+        <button class="btn btn-help" id="btn-help" disabled>Help</button>
+      </div>
+      <button class="report" id="btn-report" hidden>Report this post as a scam or abuse</button>
+      <p class="hint">Drag the card, tap the buttons, or use the ← → keys.</p>
+      <div id="help-panel" class="panel" hidden>
+        <h2 id="hp-title">Send help directly</h2>
+        <span class="label">How to pay this bill</span>
+        <div class="howto" id="hp-how"></div>
+        <div class="row">
+          <button class="btn btn-ghost" id="hp-copy">Copy</button>
+          <button class="btn btn-ghost" id="hp-done">Next bill</button>
+        </div>
+        <p class="warn">Money goes straight from you to the person. This site never handles payments and can't verify posts, so only send what you'd be comfortable giving.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-ask" hidden>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <form id="ask-form" novalidate>
+        <div class="two">
+          <div class="field">
+            <label for="f-kind">Bill type</label>
+            <select id="f-kind">
+              <option>Rent</option><option>Electric</option><option>Gas</option><option>Water</option>
+              <option>Phone</option><option>Internet</option><option>Car payment</option><option>Car insurance</option>
+              <option>Medical</option><option>Childcare</option><option>Groceries</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-amount">Amount due ($)</label>
+            <input id="f-amount" type="number" inputmode="decimal" min="1" max="100000" step="0.01" placeholder="148.20">
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-due">Due date</label>
+          <input id="f-due" type="date">
+        </div>
+        <div class="field">
+          <label for="f-note">What's going on (optional)</label>
+          <textarea id="f-note" maxlength="400" placeholder="Hours got cut this month and the shutoff notice came today."></textarea>
+        </div>
+        <div class="field">
+          <label for="f-how">How people can pay</label>
+          <input id="f-how" maxlength="200" placeholder="Cash App $handle, Venmo @handle, or a GoFundMe link">
+          <p class="small">This is the only way helpers can reach you. Don't post your full name, address, or any bank or card numbers.</p>
+        </div>
+        <button class="btn btn-help" type="submit" id="f-submit">Post anonymously</button>
+        <p class="msg" id="f-msg" aria-live="polite"></p>
+      </form>
+      <div class="mine" id="mine" hidden>
+        <h2>Your posted bills</h2>
+        <div id="mine-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>How this works.</strong> Nobody signs in and no names are stored. Helpers pay people directly through the link on each bill; this site never touches money.</p>
+    <p>Posts can't be verified. Bills reported three times are hidden, and bills disappear two weeks after their due date.</p>
+  </footer>
+</div>
+
+<script>
+// ===== Settings: your Supabase project =====
+// Find these in Supabase > Project Settings > API (Data API / API Keys).
+// The "anon" / "publishable" key is meant to be public. Never put the service_role / secret key here.
+const SUPABASE_URL = "https://qgymszrpaicqgiwcyxpd.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFneW1zenJwYWljcWdpd2N5eHBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0NzM3NDAsImV4cCI6MjEwNDA0OTc0MH0.nJu1Z6SPLDj0xBGSgbWqVqPlSQNGW4GI5v3qQE8_1Wk";
+// ===========================================
+
+(() => {
+  const $ = (id) => document.getElementById(id);
+  let bills = [], queue = [], current = null;
+  let seen = new Set(), reported = new Set(), mine = [];
+  const configured = /^https:\/\/.+\.supabase\.co\/?$/.test(SUPABASE_URL) && SUPABASE_KEY.length > 20;
+
+  const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || "null") ?? d; } catch (e) { return d; } };
+  const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  seen = new Set(load("lab-seen", []));
+  reported = new Set(load("lab-reported", []));
+  mine = load("lab-mine", []); // [{id, token, kind, amount, due}]
+  const saveSeen = () => store("lab-seen", [...seen].slice(-500));
+
+  async function rpc(name, args) {
+    const res = await fetch(SUPABASE_URL.replace(/\/$/, "") + "/rest/v1/rpc/" + name, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY },
+      body: JSON.stringify(args || {})
+    });
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : null;
+    if (!res.ok) { const err = new Error((data && data.message) || "Request failed"); err.status = res.status; throw err; }
+    return data;
+  }
+
+  // Tabs
+  function showTab(which) {
+    const help = which === "help";
+    $("tab-help").setAttribute("aria-selected", help);
+    $("tab-ask").setAttribute("aria-selected", !help);
+    $("view-help").hidden = !help;
+    $("view-ask").hidden = help;
+  }
+  $("tab-help").onclick = () => showTab("help");
+  $("tab-ask").onclick = () => showTab("ask");
+  if (location.hash === "#post") showTab("ask");
+
+  const money = (n) => "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function dueText(d) {
+    if (!d) return { text: "No date", soon: false };
+    const due = new Date(d + "T12:00:00");
+    if (isNaN(due)) return { text: "No date", soon: false };
+    const today = new Date(); today.setHours(12, 0, 0, 0);
+    const days = Math.round((due - today) / 86400000);
+    const label = due.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    if (days < 0) return { text: label + " · past due", soon: true };
+    if (days <= 3) return { text: label + " · " + (days === 0 ? "today" : days + "d left"), soon: true };
+    return { text: label, soon: false };
+  }
+  function ago(ms) {
+    const m = Math.round((Date.now() - ms) / 60000);
+    if (m < 60) return Math.max(1, m) + "m ago";
+    const h = Math.round(m / 60);
+    if (h < 48) return h + "h ago";
+    return Math.round(h / 24) + "d ago";
+  }
+
+  function cardEl(b, back) {
+    const el = document.createElement("article");
+    el.className = "stub" + (back ? " back" : "");
+    const due = dueText(b.due);
+    el.innerHTML = `
+      <div class="verdict help">Help</div><div class="verdict pass">Pass</div>
+      <div class="stub-head"><span class="kind"></span><span class="posted"></span></div>
+      <div class="amount-row">
+        <div><span class="label">Amount due</span><div class="amount"></div></div>
+        <div class="due"><span class="label">Due</span><span class="d"></span></div>
+      </div>
+      <div class="note"><p></p></div>
+      <div class="anon">Posted anonymously · bill #<span class="no"></span></div>`;
+    el.querySelector(".kind").textContent = b.kind || "Bill";
+    el.querySelector(".posted").textContent = b.created ? ago(b.created) : "";
+    el.querySelector(".amount").textContent = money(b.amount || 0);
+    el.querySelector(".d").textContent = due.text;
+    if (due.soon) el.querySelector(".due").classList.add("soon");
+    el.querySelector(".note p").textContent = b.note || "No details given.";
+    el.querySelector(".no").textContent = String(b.id).slice(0, 6).toUpperCase();
+    return el;
+  }
+
+  function emptyEl(title, body) {
+    const d = document.createElement("div");
+    d.className = "empty";
+    const s = document.createElement("strong"); s.textContent = title;
+    const p = document.createElement("span"); p.textContent = body;
+    d.append(s, p);
+    return d;
+  }
+
+  function rebuildQueue() {
+    const mineIds = new Set(mine.map((m) => m.id));
+    queue = bills.filter((b) => !seen.has(b.id) && !reported.has(b.id) && !mineIds.has(b.id));
+    queue.sort((a, b) => (a.due || "9999").localeCompare(b.due || "9999") || (b.created || 0) - (a.created || 0));
+  }
+
+  const panelOpen = () => !$("help-panel").hidden;
+  function setButtons() {
+    const off = !current || panelOpen();
+    $("btn-help").disabled = $("btn-pass").disabled = off;
+    $("btn-report").hidden = !current || panelOpen();
+  }
+
+  function renderDeck() {
+    const deck = $("deck");
+    deck.replaceChildren();
+    current = queue[0] || null;
+    setButtons();
+    if (!current) {
+      deck.append(bills.length
+        ? emptyEl("You've seen every bill", "New ones appear here as people post them.")
+        : emptyEl("No bills posted yet", "When someone posts a bill it shows up here. Open “Post a bill” to add the first one."));
+      return;
+    }
+    if (queue[1]) deck.append(cardEl(queue[1], true));
+    const top = cardEl(current, false);
+    deck.append(top);
+    attachDrag(top);
+  }
+
+  function attachDrag(el) {
+    let x0 = 0, dx = 0, dragging = false;
+    const help = el.querySelector(".verdict.help"), pass = el.querySelector(".verdict.pass");
+    el.addEventListener("pointerdown", (e) => {
+      if (panelOpen()) return;
+      dragging = true; x0 = e.clientX; dx = 0; el.classList.add("dragging"); el.setPointerCapture(e.pointerId);
+    });
+    el.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      dx = e.clientX - x0;
+      el.style.transform = `translateX(${dx}px) rotate(${dx / 18}deg)`;
+      help.style.opacity = Math.max(0, Math.min(1, dx / 90));
+      pass.style.opacity = Math.max(0, Math.min(1, -dx / 90));
+    });
+    const end = () => {
+      if (!dragging) return;
+      dragging = false; el.classList.remove("dragging");
+      if (dx > 100) decide("help");
+      else if (dx < -100) decide("pass");
+      else { el.style.transform = ""; help.style.opacity = pass.style.opacity = 0; }
+    };
+    el.addEventListener("pointerup", end);
+    el.addEventListener("pointercancel", end);
+  }
+
+  function decide(choice) {
+    if (!current || panelOpen()) return;
+    const top = $("deck").querySelector(".stub:not(.back)");
+    if (top) {
+      top.style.transform = `translateX(${choice === "help" ? 520 : -520}px) rotate(${choice === "help" ? 20 : -20}deg)`;
+      top.querySelector(".verdict." + choice).style.opacity = 1;
+    }
+    const bill = current;
+    seen.add(bill.id); saveSeen();
+    setTimeout(() => {
+      rebuildQueue();
+      if (choice === "help") openPanel(bill);
+      renderDeck();
+    }, 220);
+  }
+
+  function openPanel(b) {
+    $("hp-title").textContent = `Help with ${money(b.amount || 0)} ${(b.kind || "bill").toLowerCase()}`;
+    const how = $("hp-how");
+    how.replaceChildren();
+    const text = String(b.how || "").trim();
+    if (/^https:\/\/[^\s]+$/i.test(text)) {
+      const a = document.createElement("a");
+      a.href = text; a.target = "_blank"; a.rel = "noopener noreferrer nofollow"; a.textContent = text;
+      how.append(a);
+    } else {
+      how.textContent = text || "No payment info given.";
+    }
+    $("hp-copy").dataset.text = text;
+    $("help-panel").hidden = false;
+    setButtons();
+  }
+  $("hp-done").onclick = () => { $("help-panel").hidden = true; $("hp-copy").textContent = "Copy"; renderDeck(); };
+  $("hp-copy").onclick = async () => {
+    const t = $("hp-copy").dataset.text || "";
+    try { await navigator.clipboard.writeText(t); $("hp-copy").textContent = "Copied"; }
+    catch (e) {
+      const r = document.createRange(); r.selectNodeContents($("hp-how"));
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      $("hp-copy").textContent = "Selected, press copy";
+    }
+  };
+  $("btn-help").onclick = () => decide("help");
+  $("btn-pass").onclick = () => decide("pass");
+  $("btn-report").onclick = async () => {
+    if (!current) return;
+    const b = current;
+    reported.add(b.id); store("lab-reported", [...reported].slice(-500));
+    rebuildQueue(); renderDeck();
+    flash("Reported. You won't see that bill again.");
+    try { await rpc("lab_report_bill", { p_id: b.id }); } catch (e) {}
+  };
+  document.addEventListener("keydown", (e) => {
+    if ($("view-help").hidden || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+    if (e.key === "ArrowRight") decide("help");
+    if (e.key === "ArrowLeft") decide("pass");
+  });
+
+  let flashTimer = null;
+  function flash(text) {
+    const n = $("notice"); n.textContent = text; n.hidden = false;
+    clearTimeout(flashTimer); flashTimer = setTimeout(() => { n.hidden = true; }, 3500);
+  }
+
+  // Posting
+  const newToken = () => Array.from(crypto.getRandomValues(new Uint8Array(24)), (n) => n.toString(16).padStart(2, "0")).join("");
+
+  $("ask-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = $("f-msg"); msg.className = "msg";
+    const amount = Math.round(parseFloat($("f-amount").value) * 100) / 100;
+    const how = $("f-how").value.trim();
+    if (!(amount >= 1 && amount <= 100000)) { msg.className = "msg err"; msg.textContent = "Enter the amount due, between $1 and $100,000."; return; }
+    if (how.length < 3) { msg.className = "msg err"; msg.textContent = "Add how people can pay you, like a Cash App or Venmo handle."; return; }
+    if (/\d{9,}/.test(how.replace(/[\s-]/g, ""))) { msg.className = "msg err"; msg.textContent = "That looks like an account or card number. Use a Cash App, Venmo, or fundraiser link instead."; return; }
+    if (!configured) { msg.className = "msg err"; msg.textContent = "This site isn't connected to its database yet."; return; }
+    const token = newToken();
+    const body = {
+      p_kind: $("f-kind").value, p_amount: amount, p_due: $("f-due").value || null,
+      p_note: $("f-note").value.trim().slice(0, 400), p_how: how.slice(0, 200), p_token: token
+    };
+    $("f-submit").disabled = true;
+    try {
+      const id = await rpc("lab_post_bill", body);
+      mine = [...mine, { id, token, kind: body.p_kind, amount, due: body.p_due }];
+      store("lab-mine", mine);
+      msg.className = "msg ok"; msg.textContent = "Posted. Your bill is in the stack now, with no name attached.";
+      $("ask-form").reset();
+      await refresh();
+    } catch (err) {
+      msg.className = "msg err";
+      msg.textContent = /Too many|account or card/.test(err.message) ? err.message + "." : "Couldn't post just now. Check your connection and try again.";
+    } finally { $("f-submit").disabled = false; }
+  });
+
+  function renderMine() {
+    const list = $("mine-list");
+    list.replaceChildren();
+    $("mine").hidden = !mine.length;
+    mine.forEach((m) => {
+      const live = bills.some((b) => b.id === m.id);
+      const row = document.createElement("div"); row.className = "mine-item";
+      const s = document.createElement("span");
+      s.textContent = `${m.kind} · ${money(m.amount)} · ${dueText(m.due).text}${live ? "" : " · hidden or expired"}`;
+      const btn = document.createElement("button"); btn.textContent = live ? "Paid, take it down" : "Remove from list";
+      btn.onclick = async () => {
+        btn.disabled = true;
+        try {
+          if (live) await rpc("lab_remove_bill", { p_id: m.id, p_token: m.token });
+          mine = mine.filter((x) => x.id !== m.id);
+          store("lab-mine", mine);
+          await refresh();
+        } catch (e) { btn.disabled = false; btn.textContent = "Try again"; }
+      };
+      row.append(s, btn); list.append(row);
+    });
+  }
+
+  async function refresh() {
+    const rows = await rpc("lab_list_bills", {});
+    bills = (rows || []).map((r) => ({ ...r, amount: Number(r.amount), created: Date.parse(r.created_at) }));
+    const keep = current && !panelOpen() ? current.id : null;
+    rebuildQueue();
+    if (!keep || !queue.length || queue[0].id !== keep) renderDeck();
+    else setButtons();
+    renderMine();
+  }
+
+  if (!configured) {
+    $("deck").replaceChildren(emptyEl("Not connected yet", "Add the Supabase project URL and key at the top of the page's script to turn on posting."));
+    renderMine();
+    return;
+  }
+  let failures = 0;
+  async function tick() {
+    try { await refresh(); failures = 0; }
+    catch (e) {
+      failures++;
+      if (!bills.length) $("deck").replaceChildren(emptyEl("Bills couldn't load", "Check your connection. The page will keep trying."));
+    }
+    setTimeout(tick, failures ? 60000 : 30000);
+  }
+  tick();
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh().catch(() => {}); });
+})();
+</script>
+</body>
+</html>
